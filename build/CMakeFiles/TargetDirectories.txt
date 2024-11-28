@@ -1,0 +1,3 @@
+/mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/build/CMakeFiles/chess_proj.dir
+/mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/build/CMakeFiles/edit_cache.dir
+/mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/build/CMakeFiles/rebuild_cache.dir
