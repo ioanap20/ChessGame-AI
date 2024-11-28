@@ -8,6 +8,6 @@ include_directories(.)
 
 #add_library(myLibExample main.cpp)
 
-add_executable(chess_proj main.cpp)
+add_executable(chess_proj reading.cpp)
 
 target_link_libraries(chess_proj PRIVATE)

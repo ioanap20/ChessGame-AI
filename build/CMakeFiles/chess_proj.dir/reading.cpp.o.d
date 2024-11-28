@@ -1,5 +1,5 @@
-CMakeFiles/chess_proj.dir/main.cpp.o: \
- /mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/main.cpp \
+CMakeFiles/chess_proj.dir/reading.cpp.o: \
+ /mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/reading.cpp \
  /usr/include/stdc-predef.h /usr/include/c++/11/iostream \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
