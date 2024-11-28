@@ -69,28 +69,28 @@ include CMakeFiles/chess_proj.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/chess_proj.dir/flags.make
 
-CMakeFiles/chess_proj.dir/main.cpp.o: CMakeFiles/chess_proj.dir/flags.make
-CMakeFiles/chess_proj.dir/main.cpp.o: ../main.cpp
-CMakeFiles/chess_proj.dir/main.cpp.o: CMakeFiles/chess_proj.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/chess_proj.dir/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chess_proj.dir/main.cpp.o -MF CMakeFiles/chess_proj.dir/main.cpp.o.d -o CMakeFiles/chess_proj.dir/main.cpp.o -c /mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/main.cpp
+CMakeFiles/chess_proj.dir/reading.cpp.o: CMakeFiles/chess_proj.dir/flags.make
+CMakeFiles/chess_proj.dir/reading.cpp.o: ../reading.cpp
+CMakeFiles/chess_proj.dir/reading.cpp.o: CMakeFiles/chess_proj.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/chess_proj.dir/reading.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chess_proj.dir/reading.cpp.o -MF CMakeFiles/chess_proj.dir/reading.cpp.o.d -o CMakeFiles/chess_proj.dir/reading.cpp.o -c /mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/reading.cpp
 
-CMakeFiles/chess_proj.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/chess_proj.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/main.cpp > CMakeFiles/chess_proj.dir/main.cpp.i
+CMakeFiles/chess_proj.dir/reading.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/chess_proj.dir/reading.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/reading.cpp > CMakeFiles/chess_proj.dir/reading.cpp.i
 
-CMakeFiles/chess_proj.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/chess_proj.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/main.cpp -o CMakeFiles/chess_proj.dir/main.cpp.s
+CMakeFiles/chess_proj.dir/reading.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/chess_proj.dir/reading.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/reading.cpp -o CMakeFiles/chess_proj.dir/reading.cpp.s
 
 # Object files for target chess_proj
 chess_proj_OBJECTS = \
-"CMakeFiles/chess_proj.dir/main.cpp.o"
+"CMakeFiles/chess_proj.dir/reading.cpp.o"
 
 # External object files for target chess_proj
 chess_proj_EXTERNAL_OBJECTS =
 
-chess_proj: CMakeFiles/chess_proj.dir/main.cpp.o
+chess_proj: CMakeFiles/chess_proj.dir/reading.cpp.o
 chess_proj: CMakeFiles/chess_proj.dir/build.make
 chess_proj: CMakeFiles/chess_proj.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable chess_proj"
