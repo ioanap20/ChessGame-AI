@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
     // Check if the number of arguments is correct?
 
     string historyFile = argv[2];
-    string outputFile = argv[3];
+    string outputFile = argv[4];
 
     ifstream infile(historyFile);
     ofstream fout(outputFile);
@@ -45,10 +45,7 @@ int main(int argc, char* argv[]) {
     // Determine color based on line count
     string color = (lineCount % 2 == 1) ? "black" : "white";
 
-    // Write the output file (add the new move)
-    for (size_t i = 0; i < allLines.size(); i++) {
-        fout << allLines[i] << endl;
-    }
+
     fout << "New_move (" << color << ")" << endl;
 
 
