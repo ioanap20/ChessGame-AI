@@ -6,8 +6,8 @@ project(chess_proj
 
 include_directories(.)
 
-#add_library(myLibExample main.cpp)
+#add_library(myLibExample chess_board.cpp piece.h)
 
 add_executable(chess_proj reading.cpp)
 
-target_link_libraries(chess_proj PRIVATE)
+#target_link_libraries(chess_proj PRIVATE myLibExample)
