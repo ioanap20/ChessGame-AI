@@ -18,7 +18,7 @@ struct pair_t{
 };
 
 struct piece_t{
-    std::shared_ptr<pair_t> pos;  // to get the actual position of the piece you need to call *p[0]
+    std::shared_ptr<pair_t> pos;  // to get the actual position of the piece you need to call *p
     std::string color;
     bool taken;
     std::string id;
