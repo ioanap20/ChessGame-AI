@@ -8,6 +8,7 @@
 std::vector<char> letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 std::vector<int> numbers = {1,2,3,4,5,6,7,8};
 
+// find the indices in the corresponding list (letters and numbers) given a position
 std::vector<int> find_pos_indexes(pair_t pos){
     auto it_x = std::find(letters.begin(), letters.end(), pos.x);
     auto it_y = std::find(numbers.begin(), numbers.end(), pos.y);
@@ -18,6 +19,7 @@ std::vector<int> find_pos_indexes(pair_t pos){
     return index_pos;
 };
 
+// check if a position is inside the boundaries of the grid
 bool is_position_in_grid(int index_x, int index_y){
     if (index_x>=0 && index_x<= 7 &&index_y>=0 && index_y<= 7){
         return true;
@@ -25,16 +27,41 @@ bool is_position_in_grid(int index_x, int index_y){
     return false;
 }
 
+//given a vector containing positions, and a vector containing pieces and a piece itself, outputs a 
+//vector containing only positions where no friendly piece is
+std::vector<std::shared_ptr<pair_t>> remove_friendly_pos(piece_t cur, std::vector<std::shared_ptr<pair_t>>& positions, std::vector<std::shared_ptr<piece_t>>& pieces){
+    std::vector<std::shared_ptr<pair_t>> to_remove;
+    for (auto& pos : positions){
+        for (auto& piece : pieces){
+            if (*pos == *((*piece).pos) ){
+                if (cur.color == (*piece).color){
+                    to_remove.push_back(pos);
+                }
+            }
+        }
+    }
+    for (auto& pos : to_remove){
+        std::cout<<"Trying to remove "<< *pos << std::endl;
+        positions.erase(std::remove_if(positions.begin(), positions.end(),
+                [&pos](const std::shared_ptr<pair_t>& p) {
+                    // Compare the pointed-to pair_t objects
+                    return *p == *pos;
+                }), positions.end());
+    }
+    return positions;
+}
+
 /*--------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------MOVES------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------*/
-// Default implementation (if needed)
-std::vector<std::shared_ptr<pair_t>> piece_t::moves_no_constraints() {
-    return {};
-}
+std::vector<std::shared_ptr<pair_t>> piece_t::moves(std::vector<std::shared_ptr<piece_t>>& pieces){
+    auto neighbors = moves_no_constraints();
+    auto ok_neighbors = remove_friendly_pos(*this, neighbors, pieces);
+    return ok_neighbors;
+};
 
 /*---------------------------------------KING-----------------------------------------------------------*/
-std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints(){
+std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints() const{
     pair_t actual_pos = *pos; 
     std::vector<int> index_pos = find_pos_indexes(actual_pos);
     std::vector<std::shared_ptr<pair_t>> possible_pos;
@@ -52,13 +79,12 @@ std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints(){
     }
     return possible_pos;
 };
-/*
-std::vector<std::shared_ptr<pair_t>> king_t::moves(std::vector<std::shared_ptr<pair_t>> pieces){
-    return pieces;
 
-};
-*/
 
+
+/*--------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------DISPLAYS--------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------*/
 void display_positions(std::vector<std::shared_ptr<pair_t>>& positions){
     std::cout<<"Neighbours : ";
     for (auto& pos : positions){
@@ -74,7 +100,13 @@ void display_positions(std::vector<std::shared_ptr<pair_t>>& positions){
 /*--------------------------------------------------------------------------------------------------------*/
 int main(int argc, char* argv[]){
     // Example usage
-    auto position = std::make_shared<pair_t>('d', 5);  // Correct initialization
+    auto position = std::make_shared<pair_t>('d', 5);  
+    auto position2 = std::make_shared<pair_t>('e', 5);
+
+    std::vector<std::shared_ptr<piece_t>> pieces;
+    rook_t rook(position2, "white");
+    pieces.push_back(std::make_shared<rook_t>(rook));
+
 
     // Create a king
     king_t king(position, "white");
@@ -82,7 +114,7 @@ int main(int argc, char* argv[]){
 
     // Output some values
     std::cout<<king<<std::endl;
-    auto neigh = king.moves_no_constraints();
+    auto neigh = king.moves(pieces);
     display_positions(neigh);
 
     return 0;

@@ -27,21 +27,21 @@ struct piece_t{
         : pos(pos), color(color), taken(false), id(id) {};
     
     //possible moves
-    //virtual std::vector<std::shared_ptr<pair_t>> moves(std::vector<std::shared_ptr<pair_t>> pieces);
+    std::vector<std::shared_ptr<pair_t>> moves(std::vector<std::shared_ptr<piece_t>>& pieces);
     //only takes into account board limitations
-    virtual std::vector<std::shared_ptr<pair_t>> moves_no_constraints();
+    virtual std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const {return {};}
 
     virtual ~piece_t() = default; 
+
+    // operator overloading 
 };
 
 struct king_t : piece_t{
     king_t(std::shared_ptr<pair_t> pos, std::string color) 
         : piece_t(pos, color, "king") {};
-    //std::vector<std::shared_ptr<pair_t>> moves(std::vector<std::shared_ptr<pair_t>> pieces);
-    std::vector<std::shared_ptr<pair_t>> moves_no_constraints();
+    //std::vector<std::shared_ptr<pair_t>> moves(std::vector<std::shared_ptr<piece_t>>& pieces);
+    std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
 };
-
-/*
 
 struct rook_t : piece_t{
     rook_t(std::shared_ptr<pair_t> pos, std::string color) 
@@ -49,7 +49,7 @@ struct rook_t : piece_t{
     //std::vector<std::shared_ptr<pair_t>> moves(std::vector<std::shared_ptr<pair_t>> pieces);
     //std::vector<std::shared_ptr<pair_t>> moves_no_constraints();
 };
-
+/*
 struct bishop_t : piece_t{
     bishop_t(std::shared_ptr<pair_t> pos, std::string color) 
         : piece_t(pos, color, "bishop") {};
