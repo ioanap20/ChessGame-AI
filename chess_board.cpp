@@ -1,8 +1,22 @@
 #include <iostream>
 #include <vector>
+<<<<<<< HEAD
+#include "chess_board.h"
+using namespace std;
+
+
+/*chess_board::chess_board() {
+
+    whitePieces = {
+
+    }
+
+    /*return {
+=======
 std::vector<char> initialize_chess_board() { 
 
     return {
+>>>>>>> 625a5f93aab906beb6c9d993849b88ca3c48ae51
         'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r', // Black
         'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 
         '.', '.', '.', '.', '.', '.', '.', '.', 
@@ -11,7 +25,11 @@ std::vector<char> initialize_chess_board() {
         '.', '.', '.', '.', '.', '.', '.', '.',
         'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 
         'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'  // White
-    };
+    };*/
+
+void chess_board::move(pair_t from, pair_t to) {
+    // move piece from one position to another
+    // update boardMap
 }
 
 
@@ -32,9 +50,9 @@ void print_chess_board(const std::vector<char>& board) {
     std::cout << "-------------------------\n";
 }
 
-int main(){
+/*int main(){
     std::vector<char> chess_board = initialize_chess_board();
     print_chess_board(chess_board);
     return 0;
-}
+}*/
 
