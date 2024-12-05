@@ -75,7 +75,7 @@ struct pawn_t : piece_t{
 
 /*------------------------------------OS OPERATOR OVERLOADING------------------------------------------------------*/
 
-std::ostream& operator << (std::ostream& os, const pair_t& pair){
+std::int argc, char *argv[]stream& operator << (std::ostream& os, const pair_t& pair){
     return os<<pair.x<<pair.y;
 };
 
