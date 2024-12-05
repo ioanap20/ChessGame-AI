@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-<<<<<<< HEAD
 #include "chess_board.h"
 using namespace std;
 
@@ -12,11 +11,6 @@ using namespace std;
     }
 
     /*return {
-=======
-std::vector<char> initialize_chess_board() { 
-
-    return {
->>>>>>> 625a5f93aab906beb6c9d993849b88ca3c48ae51
         'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r', // Black
         'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 
         '.', '.', '.', '.', '.', '.', '.', '.', 
