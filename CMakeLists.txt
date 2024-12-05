@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(chess_proj
+project(King_moves
   VERSION 1.0
   LANGUAGES CXX)
 
 include_directories(.)
 
-#add_library(myLibExample chess_board.cpp piece.h)
+add_library(myLibExample reading.cpp)
 
-add_executable(chess_proj reading.cpp)
+add_executable(King_moves main.cpp)
 
 #target_link_libraries(chess_proj PRIVATE myLibExample)

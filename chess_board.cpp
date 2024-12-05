@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
-std::vector<char> initialize_chess_board() {
+std::vector<char> initialize_chess_board() { 
+
     return {
         'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r', // Black
         'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 
