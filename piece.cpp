@@ -2,6 +2,8 @@
 #include "piece.h"
 #include <algorithm>
 
+
+/*----------------------AUXILIARY FUNCTIONS FOR MOVE IMPLEMENTATION---------------------------------------*/
 //global variable to store the possible positions
 std::vector<char> letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 std::vector<int> numbers = {1,2,3,4,5,6,7,8};
@@ -22,11 +24,16 @@ bool is_position_in_grid(int index_x, int index_y){
     }
     return false;
 }
+
+/*--------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------MOVES------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------*/
+// Default implementation (if needed)
 std::vector<std::shared_ptr<pair_t>> piece_t::moves_no_constraints() {
-    // Default implementation (if needed)
     return {};
 }
 
+/*---------------------------------------KING-----------------------------------------------------------*/
 std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints(){
     pair_t actual_pos = *pos; 
     std::vector<int> index_pos = find_pos_indexes(actual_pos);
@@ -52,24 +59,29 @@ std::vector<std::shared_ptr<pair_t>> king_t::moves(std::vector<std::shared_ptr<p
 };
 */
 
-void display_positions(std::vector<std::shared_ptr<pair_t>> positions){
+void display_positions(std::vector<std::shared_ptr<pair_t>>& positions){
     std::cout<<"Neighbours : ";
-    for (size_t i=0; i<positions.size(); i++){
-        std::cout<<positions[i]->x<<positions[i]->y<<" ";
+    for (auto& pos : positions){
+        std::cout<<*pos<<" ";
     }
     std::cout<<std::endl;
 }
 
+
+
+/*--------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------GLOBAL TESTING-----------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------*/
 int main(int argc, char* argv[]){
     // Example usage
     auto position = std::make_shared<pair_t>('d', 5);  // Correct initialization
 
     // Create a king
     king_t king(position, "white");
+    std::cout<<*position<<std::endl;
 
     // Output some values
-    std::cout << "King color: " << king.color << std::endl;
-    std::cout << "King position: " << king.pos->x << king.pos->y << std::endl;
+    std::cout<<king<<std::endl;
     auto neigh = king.moves_no_constraints();
     display_positions(neigh);
 

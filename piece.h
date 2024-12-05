@@ -79,6 +79,16 @@ struct pawn_t : piece_t{
 };
 */
 
+/*------------------------------------OS OPERATOR OVERLOADING------------------------------------------------------*/
+
+std::ostream& operator << (std::ostream& os, const pair_t& pair){
+    return os<<pair.x<<pair.y;
+};
+
+std::ostream& operator << (std::ostream& os, const piece_t& piece){
+    return os<<piece.color<<" "<<piece.id<<" at "<< *piece.pos<< "  Status : "<<piece.taken;
+};
+
 #endif
 
 
