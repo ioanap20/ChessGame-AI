@@ -85,6 +85,113 @@ std::vector<std::shared_ptr<pair_t>> pawn_t::moves_no_constraints() const{
 
 };
 
+/*-----------------------------------------------BISHOP---------------------------------------------------*/
+std::vector<std::shared_ptr<pair_t>> bishop_t::moves_no_constraints() const{
+    pair_t actual_pos = *pos; 
+    std::vector<int> index_pos = find_pos_indexes(actual_pos);
+    std::vector<std::shared_ptr<pair_t>> possible_pos;
+    
+	// toward top right
+	for (int n = 1; n < 8; n++) {
+		if (is_position_in_grid(index_pos[0]+n, index_pos[1]+n)){
+		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]+n], numbers[index_pos[1]+n]));
+		}
+		else {
+			break;
+		}
+	}
+		
+    // toward top left
+	for (int n = 1; n < 8; n++) {
+		if (is_position_in_grid(index_pos[0]-n, index_pos[1]+n)){
+		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]-n], numbers[index_pos[1]+n]));
+		}
+		else {
+			break;
+		}  
+	}
+		    
+	// toward bottom right
+	for (int n = 1; n < 8; n++) {
+		if (is_position_in_grid(index_pos[0]+n, index_pos[1]-n)){
+		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]+n], numbers[index_pos[1]-n]));
+		}
+		else {
+			break;
+		}
+	}
+		
+	// toward bottom left
+	for (int n = 1; n < 8; n++) {
+		if (is_position_in_grid(index_pos[0]-n, index_pos[1]-n)){
+		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]+n], numbers[index_pos[1]+n]));
+		}
+		else {
+			break;
+		}
+	}
+	
+    return possible_pos;
+};
+
+/*-----------------------------------------------ROOK-----------------------------------------------------*/
+std::vector<std::shared_ptr<pair_t>> rook_t::moves_no_constraints() const{
+    pair_t actual_pos = *pos; 
+    std::vector<int> index_pos = find_pos_indexes(actual_pos);
+    std::vector<std::shared_ptr<pair_t>> possible_pos;
+	for (int n = 1; n < 8; n++) {   // vert up
+		if (is_position_in_grid(index_pos[0], index_pos[1]+n)){
+		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]], numbers[index_pos[1]+n]));
+		}
+		else {
+			break;
+		}
+	}	
+	for (int n = 1; n < 8; n++) {   // vert down
+		if (is_position_in_grid(index_pos[0], index_pos[1]-n)){
+		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]], numbers[index_pos[1]-n]));
+		}
+		else {
+			break;
+		}
+	}
+	for (int n = 1; n < 8; n++) {	// hor right
+		if (is_position_in_grid(index_pos[0]+n, index_pos[1])){
+		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]+n], numbers[index_pos[1]]));
+		}
+		else {
+			break;
+		}
+	}
+	for (int n = 1; n < 8; n++) {   // hor left
+		if (is_position_in_grid(index_pos[0]-n, index_pos[1])){
+		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]-n], numbers[index_pos[1]]));
+		}
+		else {
+			break;
+		}
+	}	
+	return possible_pos;
+};
+
+/*-----------------------------------------------QUEEN----------------------------------------------------*/
+std::vector<std::shared_ptr<pair_t>> queen_t::moves_no_constraints() const{
+    pair_t actual_pos = *pos; 
+    std::vector<int> index_pos = find_pos_indexes(actual_pos);
+    std::vector<std::shared_ptr<pair_t>> possible_pos;
+	
+    bishop_t bishop(std::make_shared<pair_t>(actual_pos.x, actual_pos.y), color);
+    std::vector<std::shared_ptr<pair_t>> bishop_pos = bishop.moves_no_constraints();
+    
+    bishop_t rook(std::make_shared<pair_t>(actual_pos.x, actual_pos.y), color);
+    std::vector<std::shared_ptr<pair_t>> rook_pos = rook.moves_no_constraints();
+
+    possible_pos.insert(possible_pos.end(), bishop_pos.begin(), bishop_pos.end());	
+	possible_pos.insert(possible_pos.end(), rook_pos.begin(), rook_pos.end());
+
+	return possible_pos;
+};
+
 
 
 /*--------------------------------------------------------------------------------------------------------*/
