@@ -39,45 +39,39 @@ struct piece_t{
 struct king_t : piece_t{
     king_t(std::shared_ptr<pair_t> pos, std::string color) 
         : piece_t(pos, color, "king") {};
-    //std::vector<std::shared_ptr<pair_t>> moves(std::vector<std::shared_ptr<piece_t>>& pieces);
     std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
 };
 
 struct rook_t : piece_t{
     rook_t(std::shared_ptr<pair_t> pos, std::string color) 
         : piece_t(pos, color, "rook") {};
-    //std::vector<std::shared_ptr<pair_t>> moves(std::vector<std::shared_ptr<pair_t>> pieces);
-    //std::vector<std::shared_ptr<pair_t>> moves_no_constraints();
+    std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
 };
-/*
+
 struct bishop_t : piece_t{
     bishop_t(std::shared_ptr<pair_t> pos, std::string color) 
         : piece_t(pos, color, "bishop") {};
-    //std::vector<std::shared_ptr<pair_t>> moves(std::vector<std::shared_ptr<pair_t>> pieces);
-    //std::vector<std::shared_ptr<pair_t>> moves_no_constraints();
+    std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
 };
 
 struct horse_t : piece_t{
     horse_t(std::shared_ptr<pair_t> pos, std::string color) 
         : piece_t(pos, color, "horse") {};
-    //std::vector<std::shared_ptr<pair_t>> moves(std::vector<std::shared_ptr<pair_t>> pieces);
-    //std::vector<std::shared_ptr<pair_t>> moves_no_constraints();
+    std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
 };
 
 struct queen_t : piece_t{
     queen_t(std::shared_ptr<pair_t> pos, std::string color) 
         : piece_t(pos, color, "queen") {};
-    //std::vector<std::shared_ptr<pair_t>> moves(std::vector<std::shared_ptr<pair_t>> pieces);
-    //std::vector<std::shared_ptr<pair_t>> moves_no_constraints();
+    std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
 };
 
 struct pawn_t : piece_t{
     pawn_t(std::shared_ptr<pair_t> pos, std::string color) 
         : piece_t(pos, color, "pawn") {};
-    //std::vector<std::shared_ptr<pair_t>> moves(std::vector<std::shared_ptr<pair_t>> pieces);
-    //std::vector<std::shared_ptr<pair_t>> moves_no_constraints();
+    std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
 };
-*/
+
 
 /*------------------------------------OS OPERATOR OVERLOADING------------------------------------------------------*/
 

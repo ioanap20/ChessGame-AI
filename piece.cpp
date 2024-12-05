@@ -80,6 +80,11 @@ std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints() const{
     return possible_pos;
 };
 
+/*------------------------------------------PAWN---------------------------------------------------------*/
+std::vector<std::shared_ptr<pair_t>> pawn_t::moves_no_constraints() const{
+
+};
+
 
 
 /*--------------------------------------------------------------------------------------------------------*/
