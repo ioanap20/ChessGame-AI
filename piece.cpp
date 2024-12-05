@@ -183,7 +183,7 @@ std::vector<std::shared_ptr<pair_t>> queen_t::moves_no_constraints() const{
     bishop_t bishop(std::make_shared<pair_t>(actual_pos.x, actual_pos.y), color);
     std::vector<std::shared_ptr<pair_t>> bishop_pos = bishop.moves_no_constraints();
     
-    bishop_t rook(std::make_shared<pair_t>(actual_pos.x, actual_pos.y), color);
+    rook_t rook(std::make_shared<pair_t>(actual_pos.x, actual_pos.y), color);
     std::vector<std::shared_ptr<pair_t>> rook_pos = rook.moves_no_constraints();
 
     possible_pos.insert(possible_pos.end(), bishop_pos.begin(), bishop_pos.end());	
