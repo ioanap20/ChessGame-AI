@@ -83,6 +83,13 @@ std::ostream& operator << (std::ostream& os, const piece_t& piece){
     return os<<piece.color<<" "<<piece.id<<" at "<< *piece.pos<< "  Status : "<<piece.taken;
 };
 
+std::ostream& operator << (std::ostream& os, const std::vector<std::shared_ptr<piece_t>> pieces){
+    for (const auto& piece : pieces){
+        os<<*piece<<std::endl;
+    }
+    return os;
+}
+
 #endif
 
 

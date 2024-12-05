@@ -54,8 +54,52 @@ std::vector<std::shared_ptr<pair_t>> remove_friendly_pos(piece_t cur, std::vecto
 /*--------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------MOVES------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------*/
+std::vector<std::shared_ptr<pair_t>> pawn_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::vector<std::shared_ptr<piece_t>>& pieces){
+    std::vector<std::shared_ptr<pair_t>> vertical_pos;
+    std::vector<std::shared_ptr<pair_t>> diag_pos;
+    for (auto& pos : pos_positions){
+        ((*pos).x == (*(cur.pos)).x ? vertical_pos : diag_pos).push_back(pos);
+    }
+    std::vector<std::shared_ptr<pair_t>> ok_positions;
+
+    //sifting vertical positions
+    bool cond = true;
+    for (auto& pos : vertical_pos){
+        if (!cond){ break;}
+        for (auto& piece : pieces){
+            if (*pos == *((*piece).pos)){
+                cond = false;
+                break;
+            }
+        }
+        if (cond){
+            ok_positions.push_back(pos);
+        }
+    }
+
+    //sifting diagonal positions -- only can go where opponent piece
+    for (auto& pos: diag_pos){
+        cond = true;
+        for (auto& piece : pieces){
+            if (*pos == *((*piece).pos)){
+                if (cur.color!=(*piece).color){
+                    cond = false;
+                    break;
+                }
+            }
+        }
+        if (!cond){
+            ok_positions.push_back(pos);
+        }
+    }
+    return ok_positions;
+}
+
 std::vector<std::shared_ptr<pair_t>> piece_t::moves(std::vector<std::shared_ptr<piece_t>>& pieces){
     auto neighbors = moves_no_constraints();
+    if (id=="pawn"){
+        return pawn_moves(*this, neighbors, pieces);
+    }
     auto ok_neighbors = remove_friendly_pos(*this, neighbors, pieces);
     return ok_neighbors;
 };
@@ -82,8 +126,74 @@ std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints() const{
 
 /*------------------------------------------PAWN---------------------------------------------------------*/
 std::vector<std::shared_ptr<pair_t>> pawn_t::moves_no_constraints() const{
+    pair_t actual_pos = *pos;
+    
+    // if pawn is black or white we say if it goes to towards the bottom or up + if pawn has not moved yet it can go two steps at once
+    int direction ;
+    bool init_move;
+    if (color == "white"){
+        direction = 1;
+        init_move = (actual_pos.y==2);
+    } else {
+        direction = -1;
+        init_move = (actual_pos.y==7);
+    }
 
+    std::vector<int> index_pos = find_pos_indexes(actual_pos);
+    std::vector<std::shared_ptr<pair_t>> possible_pos;
+    
+    //straight positions
+    if (is_position_in_grid(index_pos[0], index_pos[1]+direction)){
+        possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]], numbers[index_pos[1]+direction]));
+    }
+    if (init_move&&is_position_in_grid(index_pos[0],index_pos[1]+2*direction)){
+        possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]], numbers[index_pos[1]+2*direction]));
+    }
+
+    //diagonal positions
+    if (is_position_in_grid(index_pos[0]+1, index_pos[1]+direction)){
+        possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]+1], numbers[index_pos[1]+direction]));
+    }
+    if (is_position_in_grid(index_pos[0]-1, index_pos[1]+direction)){
+        possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]-1], numbers[index_pos[1]+direction]));
+    }
+    return possible_pos;
 };
+
+/*--------------------------------------------KNIGHT-------------------------------------------------------*/
+
+std::vector<std::shared_ptr<pair_t>> horse_t::moves_no_constraints() const{
+    pair_t actual_pos = *pos;
+    std::vector<int> index_pos = find_pos_indexes(actual_pos);
+    std::vector<std::shared_ptr<pair_t>> possible_pos;
+    int id_x = index_pos[0];
+    int id_y = index_pos[1];
+    if (is_position_in_grid(id_x+2, id_y+1)) {
+        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x+2], numbers[id_y+1]));
+    }
+    if (is_position_in_grid(id_x+2, id_y-1)) {
+        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x+2], numbers[id_y-1]));
+    }
+    if (is_position_in_grid(id_x-2, id_y+1)) {
+        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x-2], numbers[id_y+1]));
+    }
+    if (is_position_in_grid(id_x-2, id_y-1)) {
+        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x-2], numbers[id_y-1]));
+    }
+    if (is_position_in_grid(id_x+1, id_y+2)) {
+        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x+1], numbers[id_y+2]));
+    }
+    if (is_position_in_grid(id_x-1, id_y+2)) {
+        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x-1], numbers[id_y+2]));
+    }
+    if (is_position_in_grid(id_x+1, id_y-2)) {
+        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x+1], numbers[id_y-2]));
+    }
+    if (is_position_in_grid(id_x-1, id_y-2)) {
+        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x-1], numbers[id_y-2]));
+    }
+
+}
 
 /*-----------------------------------------------BISHOP---------------------------------------------------*/
 std::vector<std::shared_ptr<pair_t>> bishop_t::moves_no_constraints() const{
@@ -105,8 +215,7 @@ std::vector<std::shared_ptr<pair_t>> bishop_t::moves_no_constraints() const{
 	for (int n = 1; n < 8; n++) {
 		if (is_position_in_grid(index_pos[0]-n, index_pos[1]+n)){
 		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]-n], numbers[index_pos[1]+n]));
-		}
-		else {
+		} else {
 			break;
 		}  
 	}
@@ -115,8 +224,7 @@ std::vector<std::shared_ptr<pair_t>> bishop_t::moves_no_constraints() const{
 	for (int n = 1; n < 8; n++) {
 		if (is_position_in_grid(index_pos[0]+n, index_pos[1]-n)){
 		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]+n], numbers[index_pos[1]-n]));
-		}
-		else {
+		} else {
 			break;
 		}
 	}
@@ -130,7 +238,6 @@ std::vector<std::shared_ptr<pair_t>> bishop_t::moves_no_constraints() const{
 			break;
 		}
 	}
-	
     return possible_pos;
 };
 
@@ -212,22 +319,37 @@ void display_positions(std::vector<std::shared_ptr<pair_t>>& positions){
 /*--------------------------------------------------------------------------------------------------------*/
 int main(int argc, char* argv[]){
     // Example usage
-    auto position = std::make_shared<pair_t>('d', 5);  
-    auto position2 = std::make_shared<pair_t>('e', 5);
+    auto position = std::make_shared<pair_t>('e', 3);  
+    auto position2 = std::make_shared<pair_t>('d', 6);
+    auto pos3 = std::make_shared<pair_t>('e', 7);
+    auto pos4= std::make_shared<pair_t>('e', 2);
 
     std::vector<std::shared_ptr<piece_t>> pieces;
     rook_t rook(position2, "white");
-    pieces.push_back(std::make_shared<rook_t>(rook));
+    pawn_t wpawn(pos4, "white");
+    pawn_t bpawn(pos3, "black");
 
-
-    // Create a king
     king_t king(position, "white");
-    std::cout<<*position<<std::endl;
+    pieces.push_back(std::make_shared<king_t>(king));
+    pieces.push_back(std::make_shared<rook_t>(rook));
+    pieces.push_back(std::make_shared<pawn_t>(wpawn));
+    pieces.push_back(std::make_shared<pawn_t>(bpawn));
+
+    std::cout<<"Pieces on the board"<<std::endl;
+    std::cout<<pieces<<std::endl;
 
     // Output some values
-    std::cout<<king<<std::endl;
+    //std::cout<<king<<std::endl;
+    //std::cout<<wpawn<<std::endl;
+    //std::cout<<bpawn<<std::endl;
     auto neigh = king.moves(pieces);
+    auto neigh1 = wpawn.moves(pieces);
+    auto neigh2 = bpawn.moves(pieces);
+    std::cout<<"King's possible moves"<<std::endl;
     display_positions(neigh);
-
+    std::cout<<"White Pawn's possible moves"<<std::endl;
+    display_positions(neigh1);
+    std::cout<<"Black Pawn's possible moves"<<std::endl;
+    display_positions(neigh2);
     return 0;
 }
