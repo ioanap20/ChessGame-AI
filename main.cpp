@@ -14,6 +14,12 @@ int main(int argc, char* argv[]) {
 
     board.display_chess_board();
 
+<<<<<<< HEAD
+
+    cout << endl;
+
+=======
+>>>>>>> fe595fa769eec27d5edfce170f3c58834a35906f
     reading read(argc, argv, board);
 
     board.display_chess_board();
