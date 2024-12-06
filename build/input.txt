@@ -1,13 +1,6 @@
-<<<<<<< HEAD
 e2e4
 e7e6
 d2d4
 d7d5
 b1d2
 b8c6
-=======
-d7d5
-f8d6
-g8h4
-a7b8
->>>>>>> fe595fa769eec27d5edfce170f3c58834a35906f
