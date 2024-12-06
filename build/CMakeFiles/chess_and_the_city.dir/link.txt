@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/chess_and_the_city.dir/main.cpp.o -o chess_and_the_city  liblib_chess_and_the_city.a 

@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj
+CMAKE_SOURCE_DIR = /mnt/c/Users/Ioana/OneDrive/Documents/CScripts/CSE201/chess_project/chess_proj
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/build
+CMAKE_BINARY_DIR = /mnt/c/Users/Ioana/OneDrive/Documents/CScripts/CSE201/chess_project/chess_proj/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/build/CMakeFiles /mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Ioana/OneDrive/Documents/CScripts/CSE201/chess_project/chess_proj/build/CMakeFiles /mnt/c/Users/Ioana/OneDrive/Documents/CScripts/CSE201/chess_project/chess_proj/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Ioana/OneDrive/Documents/CScripts/CSE201/chess_project/chess_proj/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -117,24 +117,109 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named chess_proj
+# Target rules for targets named lib_chess_and_the_city
 
 # Build rule for target.
-chess_proj: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 chess_proj
-.PHONY : chess_proj
+lib_chess_and_the_city: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lib_chess_and_the_city
+.PHONY : lib_chess_and_the_city
 
 # fast build rule for target.
-chess_proj/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess_proj.dir/build.make CMakeFiles/chess_proj.dir/build
-.PHONY : chess_proj/fast
+lib_chess_and_the_city/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_chess_and_the_city.dir/build.make CMakeFiles/lib_chess_and_the_city.dir/build
+.PHONY : lib_chess_and_the_city/fast
+
+#=============================================================================
+# Target rules for targets named chess_and_the_city
+
+# Build rule for target.
+chess_and_the_city: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 chess_and_the_city
+.PHONY : chess_and_the_city
+
+# fast build rule for target.
+chess_and_the_city/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess_and_the_city.dir/build.make CMakeFiles/chess_and_the_city.dir/build
+.PHONY : chess_and_the_city/fast
+
+chess_board.o: chess_board.cpp.o
+.PHONY : chess_board.o
+
+# target to build an object file
+chess_board.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_chess_and_the_city.dir/build.make CMakeFiles/lib_chess_and_the_city.dir/chess_board.cpp.o
+.PHONY : chess_board.cpp.o
+
+chess_board.i: chess_board.cpp.i
+.PHONY : chess_board.i
+
+# target to preprocess a source file
+chess_board.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_chess_and_the_city.dir/build.make CMakeFiles/lib_chess_and_the_city.dir/chess_board.cpp.i
+.PHONY : chess_board.cpp.i
+
+chess_board.s: chess_board.cpp.s
+.PHONY : chess_board.s
+
+# target to generate assembly for a file
+chess_board.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_chess_and_the_city.dir/build.make CMakeFiles/lib_chess_and_the_city.dir/chess_board.cpp.s
+.PHONY : chess_board.cpp.s
+
+main.o: main.cpp.o
+.PHONY : main.o
+
+# target to build an object file
+main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess_and_the_city.dir/build.make CMakeFiles/chess_and_the_city.dir/main.cpp.o
+.PHONY : main.cpp.o
+
+main.i: main.cpp.i
+.PHONY : main.i
+
+# target to preprocess a source file
+main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess_and_the_city.dir/build.make CMakeFiles/chess_and_the_city.dir/main.cpp.i
+.PHONY : main.cpp.i
+
+main.s: main.cpp.s
+.PHONY : main.s
+
+# target to generate assembly for a file
+main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess_and_the_city.dir/build.make CMakeFiles/chess_and_the_city.dir/main.cpp.s
+.PHONY : main.cpp.s
+
+piece.o: piece.cpp.o
+.PHONY : piece.o
+
+# target to build an object file
+piece.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_chess_and_the_city.dir/build.make CMakeFiles/lib_chess_and_the_city.dir/piece.cpp.o
+.PHONY : piece.cpp.o
+
+piece.i: piece.cpp.i
+.PHONY : piece.i
+
+# target to preprocess a source file
+piece.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_chess_and_the_city.dir/build.make CMakeFiles/lib_chess_and_the_city.dir/piece.cpp.i
+.PHONY : piece.cpp.i
+
+piece.s: piece.cpp.s
+.PHONY : piece.s
+
+# target to generate assembly for a file
+piece.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_chess_and_the_city.dir/build.make CMakeFiles/lib_chess_and_the_city.dir/piece.cpp.s
+.PHONY : piece.cpp.s
 
 reading.o: reading.cpp.o
 .PHONY : reading.o
 
 # target to build an object file
 reading.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess_proj.dir/build.make CMakeFiles/chess_proj.dir/reading.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_chess_and_the_city.dir/build.make CMakeFiles/lib_chess_and_the_city.dir/reading.cpp.o
 .PHONY : reading.cpp.o
 
 reading.i: reading.cpp.i
@@ -142,7 +227,7 @@ reading.i: reading.cpp.i
 
 # target to preprocess a source file
 reading.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess_proj.dir/build.make CMakeFiles/chess_proj.dir/reading.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_chess_and_the_city.dir/build.make CMakeFiles/lib_chess_and_the_city.dir/reading.cpp.i
 .PHONY : reading.cpp.i
 
 reading.s: reading.cpp.s
@@ -150,7 +235,7 @@ reading.s: reading.cpp.s
 
 # target to generate assembly for a file
 reading.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess_proj.dir/build.make CMakeFiles/chess_proj.dir/reading.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_chess_and_the_city.dir/build.make CMakeFiles/lib_chess_and_the_city.dir/reading.cpp.s
 .PHONY : reading.cpp.s
 
 # Help Target
@@ -161,7 +246,17 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... chess_proj"
+	@echo "... chess_and_the_city"
+	@echo "... lib_chess_and_the_city"
+	@echo "... chess_board.o"
+	@echo "... chess_board.i"
+	@echo "... chess_board.s"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
+	@echo "... piece.o"
+	@echo "... piece.i"
+	@echo "... piece.s"
 	@echo "... reading.o"
 	@echo "... reading.i"
 	@echo "... reading.s"

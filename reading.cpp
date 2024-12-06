@@ -4,27 +4,34 @@
 #include <vector>
 #include <map>
 #include "reading.h"
+#include "chess_board.h"
 using namespace std;
 
 
 // Function to read all lines from the file
 vector<string> reading::readAllLines(int argc, char *argv[])
 {
-        // Should we check if the number of arguments is correct?
-    string historyFile = argv[2];
-    string outputFile = argv[4];
-
-    ifstream infile(historyFile);
-    ofstream fout(outputFile);
-
-    if (!infile.is_open() || !fout.is_open()) {
-        cerr << "Error: Unable to open input or output file." << endl;
-        return ;
+    
+    if (argc < 3) {
+        std::cerr << "Error: Not enough arguments provided." << std::endl;
+        return {}; // Return an empty vector
     }
     
-    vector<string> moves;
-    string line;
+    // Should we check if the number of arguments is correct?
+    string historyFile = argv[2];
+   // string outputFile = argv[4];
 
+    ifstream infile(historyFile);
+    //ofstream fout(outputFile);
+
+     if (!infile.is_open()) {
+        std::cerr << "Error: Unable to open input file: " << historyFile << std::endl;
+        return {}; // Return an empty vector
+    }
+
+
+
+    string line;
 
     // Read all lines
     while (getline(infile, line)) {
@@ -32,25 +39,13 @@ vector<string> reading::readAllLines(int argc, char *argv[])
             moves.push_back(line); // Add line to vector
         }
     }
+    // if i put an '\n' after the input it doesn't work anymore
     infile.close();
     return moves;
 }
 
-void reading::update_white(vector<piece_t> &whiteVector, vector<string> &moves)
-{
-    // update white vector
-    // go through all the moves and if the index is even, add the move to the white vector
-    // should we have a piece that we make piece.color = white?
-}
 
-void reading::update_black(vector<piece_t> &blackVector, vector<string> &moves)
-{
-    // update black vector
-    // go through all the moves and if the index is odd, add the move to the black vector
-    // should we have a piece that we make piece.color = black?
-}
-
-void reading::update_board(map<pair_t, piece_t> &boardMap, vector<string> &moves)
+void reading::update_board(chess_board& board)
 {
     // update board
     // go thorugh all the moves
@@ -58,14 +53,26 @@ void reading::update_board(map<pair_t, piece_t> &boardMap, vector<string> &moves
     /*pair_t initial, final;
     initial.x = move[0]
     boardMap.move(initial, final);*/
-}
+
+    for (size_t i = 0; i < moves.size(); ++i) {
+        const string& move = moves[i];
+
+        pair_t from(move[0], move[1] - '0'); // Convert char to int
+        pair_t to(move[2], move[3] - '0');
 
 
-// maybe this can be done another way i just wanted to have as little as possible in main
-void reading::actualize(map<pair_t, piece_t> &boardMap, vector<piece_t> &whiteVector, vector<piece_t> &blackVector, int argc, char** argv)
-{
-    vector<string> allLines = readAllLines(argc, argv);
-    update_white(whiteVector, allLines);
-    update_black(blackVector, allLines);
-    update_board(boardMap, allLines);
+        board.move(from, to);
+
+        
+    }
+
 }
+
+reading::reading(int argc, char* argv[], chess_board& board) {
+    // Read all lines from the file
+    readAllLines(argc, argv);
+
+    // Process the moves
+    update_board(board);
+}
+

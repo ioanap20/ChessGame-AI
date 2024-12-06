@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblib_chess_and_the_city.a CMakeFiles/lib_chess_and_the_city.dir/reading.cpp.o CMakeFiles/lib_chess_and_the_city.dir/chess_board.cpp.o CMakeFiles/lib_chess_and_the_city.dir/piece.cpp.o
+/usr/bin/ranlib liblib_chess_and_the_city.a

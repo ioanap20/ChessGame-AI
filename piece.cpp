@@ -414,12 +414,27 @@ void display_positions(std::vector<std::shared_ptr<pair_t>>& positions){
     std::cout<<std::endl;
 }
 
+std::ostream& operator<<(std::ostream& os, const pair_t& pair) {
+    return os << pair.x << pair.y;
+}
+
+std::ostream& operator<<(std::ostream& os, const piece_t& piece) {
+    return os << piece.color << " " << piece.id << " at " << *piece.pos << "  Status: " << piece.taken;
+}
+
+std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<piece_t>>& pieces) {
+    for (const auto& piece : pieces) {
+        os << *piece << std::endl;
+    }
+    return os;
+}
+
 
 
 /*--------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------GLOBAL TESTING-----------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------*/
-int main(int argc, char* argv[]){
+/*int main(int argc, char* argv[]){
     // Example usage
     auto position = std::make_shared<pair_t>('d', 3);  
     auto position2 = std::make_shared<pair_t>('d', 6);
@@ -457,4 +472,4 @@ int main(int argc, char* argv[]){
     std::cout<<"Rook's Possible moves"<<std::endl;
     display_positions(rook_moves);
     return 0;
-}
+}*/
