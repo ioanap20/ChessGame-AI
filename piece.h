@@ -15,6 +15,13 @@ struct pair_t{
     bool operator==(const pair_t& other) const {
         return x==other.x && y==other.y;
     };
+    bool operator<(const pair_t& other) const{
+        if (x == other.x){
+            return y< other.y;
+        } else {
+            return true;
+        }
+    }
 };
 
 struct piece_t{
