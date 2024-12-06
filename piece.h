@@ -40,6 +40,9 @@ struct piece_t{
 
     virtual ~piece_t() = default; 
 
+    bool operator<(piece_t other){
+        return color<other.color || id<other.id;
+    }
     // operator overloading 
 };
 

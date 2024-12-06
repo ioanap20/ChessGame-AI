@@ -21,10 +21,7 @@ std::vector<int> find_pos_indexes(pair_t pos){
 
 // check if a position is inside the boundaries of the grid
 bool is_position_in_grid(int index_x, int index_y){
-    if (index_x>=0 && index_x<= 7 &&index_y>=0 && index_y<= 7){
-        return true;
-    }
-    return false;
+    return index_x>=0 && index_x<= 7 &&index_y>=0 && index_y<= 7;
 }
 
 //given a vector containing positions, and a vector containing pieces and a piece itself, outputs a 
