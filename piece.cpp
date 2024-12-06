@@ -54,6 +54,8 @@ std::vector<std::shared_ptr<pair_t>> remove_friendly_pos(piece_t cur, std::vecto
 /*--------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------MOVES------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------*/
+
+//pawn
 std::vector<std::shared_ptr<pair_t>> pawn_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::vector<std::shared_ptr<piece_t>>& pieces){
     std::vector<std::shared_ptr<pair_t>> vertical_pos;
     std::vector<std::shared_ptr<pair_t>> diag_pos;
@@ -95,10 +97,111 @@ std::vector<std::shared_ptr<pair_t>> pawn_moves(piece_t& cur, std::vector<std::s
     return ok_positions;
 }
 
+//rook
+std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::vector<std::shared_ptr<piece_t>>& pieces){
+    std::vector<std::shared_ptr<pair_t>> vert_pos;
+    std::vector<std::shared_ptr<pair_t>> hor_pos;
+    for (auto& pos : pos_positions){ ((*pos).x == (*(cur.pos)).x ? vert_pos : hor_pos).push_back(pos);}
+    std::vector<std::shared_ptr<pair_t>> vert_pos_above, vert_pos_below; // all vert pos on top of the rook or below
+    std::vector<std::shared_ptr<pair_t>> hor_pos_above, hor_pos_below;  // same for hor
+
+    for (auto& pos : vert_pos){ ((*pos).y > (*(cur.pos)).y ? vert_pos_above : vert_pos_below).push_back(pos);}
+    for (auto& pos : hor_pos){ ((*pos).x > (*(cur.pos)).x ? hor_pos_above : hor_pos_below).push_back(pos);}
+
+    // sort the vectors in ascending order for the above categories and in descending for below one
+    std::sort(vert_pos_above.begin(), vert_pos_above.end(), [](const std::shared_ptr<pair_t>& a, const std::shared_ptr<pair_t>& b){
+        return a->y<b->y;
+    });
+    std::sort(hor_pos_above.begin(), hor_pos_above.end(), [](const std::shared_ptr<pair_t>& a, const std::shared_ptr<pair_t>& b){
+        return a->x<b->x;
+    });
+    std::sort(vert_pos_below.begin(), vert_pos_below.end(), [](const std::shared_ptr<pair_t>& a, const std::shared_ptr<pair_t>& b){
+        return a->y>b->y;
+    });
+    std::sort(hor_pos_below.begin(), hor_pos_below.end(), [](const std::shared_ptr<pair_t>& a, const std::shared_ptr<pair_t>& b){
+        return a->x>b->x;
+    });
+
+    std::vector<std::shared_ptr<pair_t>> ok_positions;
+
+    //sifting positions
+    bool cond = true;
+    for (auto& pos : vert_pos_above){
+        if (!cond){ break;}
+        for (auto& piece : pieces){
+            if (*pos == *((*piece).pos)){
+                if (cur.color!=(*piece).color){
+                    ok_positions.push_back(pos);
+                }
+                cond = false;
+                break;
+            }
+        }
+        if (cond){
+            ok_positions.push_back(pos);
+        }
+    }
+    cond = true;
+    for (auto& pos : vert_pos_below){
+        if (!cond){ break;}
+        for (auto& piece : pieces){
+            if (*pos == *((*piece).pos)){
+                if (cur.color!=(*piece).color){
+                    ok_positions.push_back(pos);
+                }
+                cond = false;
+                break;
+            }
+        }
+        if (cond){
+            ok_positions.push_back(pos);
+        }
+    }
+    cond = true;
+    for (auto& pos : hor_pos_above){
+        if (!cond){ break;}
+        for (auto& piece : pieces){
+            if (*pos == *((*piece).pos)){
+                if (cur.color!=(*piece).color){
+                    ok_positions.push_back(pos);
+                }
+                cond = false;
+                break;
+            }
+        }
+        if (cond){
+            ok_positions.push_back(pos);
+        }
+    }
+    cond = true;
+    for (auto& pos : hor_pos_below){
+        if (!cond){ break;}
+        for (auto& piece : pieces){
+            if (*pos == *((*piece).pos)){
+                if (cur.color!=(*piece).color){
+                    ok_positions.push_back(pos);
+                }
+                cond = false;
+                break;
+            }
+        }
+        if (cond){
+            ok_positions.push_back(pos);
+        }
+    }
+    return ok_positions;
+
+}
+
+
+//global = works for knight and king on its own otherwise it calls the other functions
 std::vector<std::shared_ptr<pair_t>> piece_t::moves(std::vector<std::shared_ptr<piece_t>>& pieces){
     auto neighbors = moves_no_constraints();
     if (id=="pawn"){
         return pawn_moves(*this, neighbors, pieces);
+    }
+    if (id=="rook"){
+        return rook_moves(*this, neighbors, pieces);
     }
     auto ok_neighbors = remove_friendly_pos(*this, neighbors, pieces);
     return ok_neighbors;
@@ -192,6 +295,7 @@ std::vector<std::shared_ptr<pair_t>> horse_t::moves_no_constraints() const{
     if (is_position_in_grid(id_x-1, id_y-2)) {
         possible_pos.push_back(std::make_shared<pair_t>(letters[id_x-1], numbers[id_y-2]));
     }
+    return possible_pos;
 
 }
 
@@ -299,8 +403,6 @@ std::vector<std::shared_ptr<pair_t>> queen_t::moves_no_constraints() const{
 	return possible_pos;
 };
 
-
-
 /*--------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------DISPLAYS--------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------*/
@@ -319,10 +421,10 @@ void display_positions(std::vector<std::shared_ptr<pair_t>>& positions){
 /*--------------------------------------------------------------------------------------------------------*/
 int main(int argc, char* argv[]){
     // Example usage
-    auto position = std::make_shared<pair_t>('e', 3);  
+    auto position = std::make_shared<pair_t>('d', 3);  
     auto position2 = std::make_shared<pair_t>('d', 6);
-    auto pos3 = std::make_shared<pair_t>('e', 7);
-    auto pos4= std::make_shared<pair_t>('e', 2);
+    auto pos3 = std::make_shared<pair_t>('b', 6);
+    auto pos4= std::make_shared<pair_t>('g', 6);
 
     std::vector<std::shared_ptr<piece_t>> pieces;
     rook_t rook(position2, "white");
@@ -345,11 +447,14 @@ int main(int argc, char* argv[]){
     auto neigh = king.moves(pieces);
     auto neigh1 = wpawn.moves(pieces);
     auto neigh2 = bpawn.moves(pieces);
-    std::cout<<"King's possible moves"<<std::endl;
-    display_positions(neigh);
-    std::cout<<"White Pawn's possible moves"<<std::endl;
-    display_positions(neigh1);
-    std::cout<<"Black Pawn's possible moves"<<std::endl;
-    display_positions(neigh2);
+    auto rook_moves = rook.moves(pieces);
+    //std::cout<<"King's possible moves"<<std::endl;
+    //display_positions(neigh);
+    //std::cout<<"White Pawn's possible moves"<<std::endl;
+    //display_positions(neigh1);
+    //std::cout<<"Black Pawn's possible moves"<<std::endl;
+    //display_positions(neigh2);
+    std::cout<<"Rook's Possible moves"<<std::endl;
+    display_positions(rook_moves);
     return 0;
 }
