@@ -40,6 +40,13 @@ vector<string> reading::readAllLines(int argc, char *argv[])
         }
     }
     // if i put an '\n' after the input it doesn't work anymore
+    
+    if (moves.size() % 2 == 0) {
+        color_ai = {"white"};
+    } else {
+        color_ai = {"black"};
+    } 
+    
     infile.close();
     return moves;
 }

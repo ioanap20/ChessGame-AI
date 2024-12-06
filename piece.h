@@ -40,9 +40,22 @@ struct piece_t{
 
     virtual ~piece_t() = default; 
 
-    bool operator<(piece_t other){
-        return color<other.color || id<other.id;
+    bool operator<(const piece_t& other) const {
+        // Compare by color first (e.g., "black" < "white")
+        if (color != other.color)
+            return color < other.color;
+
+        // If colors are the same, compare by piece ID
+        if (id != other.id)
+            return id < other.id;
+
+        // If both color and ID are the same, compare by position
+        if (pos->x != other.pos->x)
+            return pos->x < other.pos->x;
+
+        return pos->y < other.pos->y;  // Compare y-coordinate as a final criterion
     }
+
     // operator overloading 
 };
 

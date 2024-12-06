@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/lib_chess_and_the_city.dir/algo.cpp.o"
+  "CMakeFiles/lib_chess_and_the_city.dir/algo.cpp.o.d"
   "CMakeFiles/lib_chess_and_the_city.dir/chess_board.cpp.o"
   "CMakeFiles/lib_chess_and_the_city.dir/chess_board.cpp.o.d"
   "CMakeFiles/lib_chess_and_the_city.dir/piece.cpp.o"

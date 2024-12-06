@@ -26,6 +26,7 @@ struct reading {
 
     void update_board(chess_board& board);
 
+    string color_ai;
 
 };
 

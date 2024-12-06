@@ -83,12 +83,12 @@ clean: CMakeFiles/chess_and_the_city.dir/clean
 CMakeFiles/lib_chess_and_the_city.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_chess_and_the_city.dir/build.make CMakeFiles/lib_chess_and_the_city.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_chess_and_the_city.dir/build.make CMakeFiles/lib_chess_and_the_city.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/Ioana/OneDrive/Documents/CScripts/CSE201/chess_project/chess_proj/build/CMakeFiles --progress-num=3,4,5,6 "Built target lib_chess_and_the_city"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/Ioana/OneDrive/Documents/CScripts/CSE201/chess_project/chess_proj/build/CMakeFiles --progress-num=3,4,5,6,7 "Built target lib_chess_and_the_city"
 .PHONY : CMakeFiles/lib_chess_and_the_city.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/lib_chess_and_the_city.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Ioana/OneDrive/Documents/CScripts/CSE201/chess_project/chess_proj/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Ioana/OneDrive/Documents/CScripts/CSE201/chess_project/chess_proj/build/CMakeFiles 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/lib_chess_and_the_city.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Ioana/OneDrive/Documents/CScripts/CSE201/chess_project/chess_proj/build/CMakeFiles 0
 .PHONY : CMakeFiles/lib_chess_and_the_city.dir/rule
@@ -114,7 +114,7 @@ CMakeFiles/chess_and_the_city.dir/all: CMakeFiles/lib_chess_and_the_city.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/chess_and_the_city.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Ioana/OneDrive/Documents/CScripts/CSE201/chess_project/chess_proj/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Ioana/OneDrive/Documents/CScripts/CSE201/chess_project/chess_proj/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/chess_and_the_city.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Ioana/OneDrive/Documents/CScripts/CSE201/chess_project/chess_proj/build/CMakeFiles 0
 .PHONY : CMakeFiles/chess_and_the_city.dir/rule

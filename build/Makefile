@@ -142,6 +142,30 @@ chess_and_the_city/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess_and_the_city.dir/build.make CMakeFiles/chess_and_the_city.dir/build
 .PHONY : chess_and_the_city/fast
 
+algo.o: algo.cpp.o
+.PHONY : algo.o
+
+# target to build an object file
+algo.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_chess_and_the_city.dir/build.make CMakeFiles/lib_chess_and_the_city.dir/algo.cpp.o
+.PHONY : algo.cpp.o
+
+algo.i: algo.cpp.i
+.PHONY : algo.i
+
+# target to preprocess a source file
+algo.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_chess_and_the_city.dir/build.make CMakeFiles/lib_chess_and_the_city.dir/algo.cpp.i
+.PHONY : algo.cpp.i
+
+algo.s: algo.cpp.s
+.PHONY : algo.s
+
+# target to generate assembly for a file
+algo.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib_chess_and_the_city.dir/build.make CMakeFiles/lib_chess_and_the_city.dir/algo.cpp.s
+.PHONY : algo.cpp.s
+
 chess_board.o: chess_board.cpp.o
 .PHONY : chess_board.o
 
@@ -248,6 +272,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... chess_and_the_city"
 	@echo "... lib_chess_and_the_city"
+	@echo "... algo.o"
+	@echo "... algo.i"
+	@echo "... algo.s"
 	@echo "... chess_board.o"
 	@echo "... chess_board.i"
 	@echo "... chess_board.s"
