@@ -16,7 +16,10 @@ vector<shared_ptr<pair_t>> chess_board::next_move(std::string color){
         for (auto& move : piece_to_move[*piece]){
             if (board.find(*move)!=board.end()){
                 if ((*piece).color != (*board[(*move)]).color){
-                    return {(*piece).pos, move};
+                    vector<shared_ptr<pair_t>> result;
+                    result.push_back((*piece).pos);
+                    result.push_back(move);
+                    return result;
                 }
             }
         }
