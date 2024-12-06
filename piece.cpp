@@ -121,9 +121,7 @@ std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::s
     std::sort(hor_pos_below.begin(), hor_pos_below.end(), [](const std::shared_ptr<pair_t>& a, const std::shared_ptr<pair_t>& b){
         return a->x>b->x;
     });
-
     std::vector<std::shared_ptr<pair_t>> ok_positions;
-
     //sifting positions
     bool cond = true;
     for (auto& pos : vert_pos_above){
@@ -190,7 +188,109 @@ std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::s
         }
     }
     return ok_positions;
+}
 
+//bishop
+std::vector<std::shared_ptr<pair_t>> bishop_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::vector<std::shared_ptr<piece_t>>& pieces){
+    std::vector<std::shared_ptr<pair_t>> maindiag_pos; // /
+    std::vector<std::shared_ptr<pair_t>> antidiag_pos; // // "\"
+    for (auto& pos : pos_positions){ ((pos->x - pos->y)== ((*(cur.pos)).x - (*(cur.pos)).y) ? maindiag_pos : antidiag_pos).push_back(pos);}
+    std::vector<std::shared_ptr<pair_t>> maindiag_above, maindiag_below; 
+    std::vector<std::shared_ptr<pair_t>> antidiag_above, antidiag_below; 
+
+    for (auto& pos : maindiag_pos){ ((*pos).y > (*(cur.pos)).y ? maindiag_above : maindiag_below).push_back(pos);}
+    for (auto& pos : antidiag_pos){ ((*pos).y < (*(cur.pos)).y ? antidiag_above : antidiag_below).push_back(pos);} 
+
+    std::sort(maindiag_above.begin(), maindiag_above.end(), [](const std::shared_ptr<pair_t>& a, const std::shared_ptr<pair_t>& b){
+        return a->x < b->x;
+    });
+    std::sort(antidiag_above.begin(), antidiag_above.end(), [](const std::shared_ptr<pair_t>& a, const std::shared_ptr<pair_t>& b){
+        return a->x < b->x;
+    });
+    std::sort(maindiag_below.begin(), maindiag_below.end(), [](const std::shared_ptr<pair_t>& a, const std::shared_ptr<pair_t>& b){
+        return a->x > b->x;
+    });
+    std::sort(antidiag_below.begin(), antidiag_below.end(), [](const std::shared_ptr<pair_t>& a, const std::shared_ptr<pair_t>& b){
+        return a->x > b->x;
+    });
+    std::vector<std::shared_ptr<pair_t>> ok_positions;
+    //sifting positions
+    bool cond = true;
+    for (auto& pos : maindiag_above){
+        if (!cond){ break;}
+        for (auto& piece : pieces){
+            if (*pos == *((*piece).pos)){
+                if (cur.color!=(*piece).color){
+                    ok_positions.push_back(pos);
+                }
+                cond = false;
+                break;
+            }
+        }
+        if (cond){
+            ok_positions.push_back(pos);
+        }
+    }
+    cond = true;
+    for (auto& pos : maindiag_below){
+        if (!cond){ break;}
+        for (auto& piece : pieces){
+            if (*pos == *((*piece).pos)){
+                if (cur.color!=(*piece).color){
+                    ok_positions.push_back(pos);
+                }
+                cond = false;
+                break;
+            }
+        }
+        if (cond){
+            ok_positions.push_back(pos);
+        }
+    }
+    cond = true;
+    for (auto& pos : antidiag_above){
+        if (!cond){ break;}
+        for (auto& piece : pieces){
+            if (*pos == *((*piece).pos)){
+                if (cur.color!=(*piece).color){
+                    ok_positions.push_back(pos);
+                }
+                cond = false;
+                break;
+            }
+        }
+        if (cond){
+            ok_positions.push_back(pos);
+        }
+    }
+    cond = true;
+    for (auto& pos : antidiag_below){
+        if (!cond){ break;}
+        for (auto& piece : pieces){
+            if (*pos == *((*piece).pos)){
+                if (cur.color!=(*piece).color){
+                    ok_positions.push_back(pos);
+                }
+                cond = false;
+                break;
+            }
+        }
+        if (cond){
+            ok_positions.push_back(pos);
+        }
+    }
+    return ok_positions;
+}
+
+//queen moves
+std::vector<std::shared_ptr<pair_t>> queen_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::vector<std::shared_ptr<piece_t>>& pieces){
+    std::vector<std::shared_ptr<pair_t>> vert_hor_pos;
+    std::vector<std::shared_ptr<pair_t>> diag_pos;
+    for (auto& pos : pos_positions){(((pos->x==(*(cur.pos)).x)||(pos->y==(*(cur.pos)).y)) ? vert_hor_pos : diag_pos).push_back(pos);}
+    std::vector<std::shared_ptr<pair_t>> verthor_ok_pos = rook_moves(cur, vert_hor_pos, pieces);
+    std::vector<std::shared_ptr<pair_t>> diag_ok_pos = bishop_moves(cur, diag_pos, pieces);
+    verthor_ok_pos.insert(verthor_ok_pos.end(), diag_ok_pos.begin(), diag_ok_pos.end());
+    return verthor_ok_pos;
 }
 
 
@@ -203,10 +303,17 @@ std::vector<std::shared_ptr<pair_t>> piece_t::moves(std::vector<std::shared_ptr<
     if (id=="rook"){
         return rook_moves(*this, neighbors, pieces);
     }
+    if (id=="bishop"){
+        return bishop_moves(*this, neighbors, pieces);
+    }
+    if (id=="queen"){
+        return queen_moves(*this, neighbors, pieces);
+    }
     auto ok_neighbors = remove_friendly_pos(*this, neighbors, pieces);
     return ok_neighbors;
 };
 
+/*------------------------------------//MOVES NO CONSTRAINSTS//-----------------------------------------*/
 /*---------------------------------------KING-----------------------------------------------------------*/
 std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints() const{
     pair_t actual_pos = *pos; 
@@ -264,7 +371,6 @@ std::vector<std::shared_ptr<pair_t>> pawn_t::moves_no_constraints() const{
 };
 
 /*--------------------------------------------KNIGHT-------------------------------------------------------*/
-
 std::vector<std::shared_ptr<pair_t>> horse_t::moves_no_constraints() const{
     pair_t actual_pos = *pos;
     std::vector<int> index_pos = find_pos_indexes(actual_pos);
@@ -336,7 +442,7 @@ std::vector<std::shared_ptr<pair_t>> bishop_t::moves_no_constraints() const{
 	// toward bottom left
 	for (int n = 1; n < 8; n++) {
 		if (is_position_in_grid(index_pos[0]-n, index_pos[1]-n)){
-		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]+n], numbers[index_pos[1]+n]));
+		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]-n], numbers[index_pos[1]-n]));
 		}
 		else {
 			break;
@@ -432,25 +538,26 @@ std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<pie
 
 
 /*--------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------GLOBAL TESTING-----------------------------------------------*/
+/*-------------------------------------------LOCAL TESTING-----------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------*/
-/*int main(int argc, char* argv[]){
-    // Example usage
-    auto position = std::make_shared<pair_t>('d', 3);  
-    auto position2 = std::make_shared<pair_t>('d', 6);
-    auto pos3 = std::make_shared<pair_t>('b', 6);
-    auto pos4= std::make_shared<pair_t>('g', 6);
-
+/*
+int main(int argc, char* argv[]){
+    // Example usage 
     std::vector<std::shared_ptr<piece_t>> pieces;
-    rook_t rook(position2, "white");
-    pawn_t wpawn(pos4, "white");
-    pawn_t bpawn(pos3, "black");
 
-    king_t king(position, "white");
+    rook_t rook(std::make_shared<pair_t>('g', 5), "white");
+    pawn_t wpawn(std::make_shared<pair_t>('g', 6), "white");
+    pawn_t bpawn(std::make_shared<pair_t>('b', 6), "black");
+    bishop_t bishop(std::make_shared<pair_t>('g',2), "white");
+    king_t king(std::make_shared<pair_t>('f', 2), "white");
+    queen_t queen(std::make_shared<pair_t>('d', 6), "white");
+
     pieces.push_back(std::make_shared<king_t>(king));
     pieces.push_back(std::make_shared<rook_t>(rook));
     pieces.push_back(std::make_shared<pawn_t>(wpawn));
     pieces.push_back(std::make_shared<pawn_t>(bpawn));
+    pieces.push_back(std::make_shared<bishop_t>(bishop));
+    pieces.push_back(std::make_shared<queen_t>(queen));
 
     std::cout<<"Pieces on the board"<<std::endl;
     std::cout<<pieces<<std::endl;
@@ -463,6 +570,8 @@ std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<pie
     auto neigh1 = wpawn.moves(pieces);
     auto neigh2 = bpawn.moves(pieces);
     auto rook_moves = rook.moves(pieces);
+    auto bishop_moves = bishop.moves(pieces);
+    auto queen_moves = queen.moves(pieces);
     //std::cout<<"King's possible moves"<<std::endl;
     //display_positions(neigh);
     //std::cout<<"White Pawn's possible moves"<<std::endl;
@@ -471,5 +580,9 @@ std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<pie
     //display_positions(neigh2);
     std::cout<<"Rook's Possible moves"<<std::endl;
     display_positions(rook_moves);
+    std::cout<<"Bishop's possible moves"<<std::endl;
+    display_positions(bishop_moves);
+    std::cout<<"Queen's possible moves"<<std::endl;
+    display_positions(queen_moves);
     return 0;
-}*/
+} */
