@@ -1,4 +1,4 @@
-# Install script for directory: /mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj
+# Install script for directory: /mnt/c/Users/Ioana/OneDrive/Documents/CScripts/CSE201/chess_project/chess_proj
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/mnt/c/Users/ioana/OneDrive/Documents/CScripts/CSE201/chess_proj/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/mnt/c/Users/Ioana/OneDrive/Documents/CScripts/CSE201/chess_project/chess_proj/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

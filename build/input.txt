@@ -1,13 +1,4 @@
-g5g7
-g8g9
-h6h9
-h7j9
-
-g5 - pair_t
-g5g7 - move in moves
-move[0] = g -> pair_t.x
-move[1] = 5 -> pair_t.y
-initial_pos - g5 - string -> pair_t
-last_pos - g7
-
-.move() will move from the pair_t g5 to the pair_t g7
+d7d5
+f8d6
+g8h4
+a7b8

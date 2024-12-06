@@ -39,5 +39,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/chess_proj.dir/DependInfo.cmake"
+  "CMakeFiles/lib_chess_and_the_city.dir/DependInfo.cmake"
+  "CMakeFiles/chess_and_the_city.dir/DependInfo.cmake"
   )

@@ -82,20 +82,9 @@ struct pawn_t : piece_t{
 
 /*------------------------------------OS OPERATOR OVERLOADING------------------------------------------------------*/
 
-std::ostream& operator << (std::ostream& os, const pair_t& pair){
-    return os<<pair.x<<pair.y;
-};
-
-std::ostream& operator << (std::ostream& os, const piece_t& piece){
-    return os<<piece.color<<" "<<piece.id<<" at "<< *piece.pos<< "  Status : "<<piece.taken;
-};
-
-std::ostream& operator << (std::ostream& os, const std::vector<std::shared_ptr<piece_t>> pieces){
-    for (const auto& piece : pieces){
-        os<<*piece<<std::endl;
-    }
-    return os;
-}
+std::ostream& operator<<(std::ostream& os, const pair_t& pair);
+std::ostream& operator<<(std::ostream& os, const piece_t& piece);
+std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<piece_t>>& pieces);
 
 #endif
 
