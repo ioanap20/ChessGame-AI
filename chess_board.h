@@ -15,8 +15,10 @@ struct chess_board{
     map<pair_t, std::shared_ptr<piece_t>> board;
     void move(pair_t from, pair_t to);
     void display_chess_board();
-    
+        
     vector<shared_ptr<pair_t>> next_move(std::string color);
+
+    void output_move(vector<shared_ptr<pair_t>>next_move);
 
     chess_board();
 };

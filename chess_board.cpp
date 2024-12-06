@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
 #include "chess_board.h"
 using namespace std;
 
@@ -117,6 +118,17 @@ void chess_board :: display_chess_board() {
     }
     cout << "--------------------\n";
     cout << "   a b c d e f g h\n";
+}
+
+void chess_board::output_move(vector<shared_ptr<pair_t>> next_move) {
+    ofstream outfile("output.txt");
+    if (!outfile.is_open()) {
+        cerr << "Error: Unable to open output file: output.txt" << endl;
+        return;
+    }
+
+    outfile << *next_move[0] << *next_move[1] << endl;
+    
 }
 
 /*int main(){
