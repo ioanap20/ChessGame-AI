@@ -120,8 +120,9 @@ void chess_board :: display_chess_board() {
     cout << "   a b c d e f g h\n";
 }
 
-void chess_board::output_move(vector<shared_ptr<pair_t>> next_move) {
-    ofstream outfile("output.txt");
+void chess_board::output_move(vector<shared_ptr<pair_t>> next_move, char* argv[]) {
+    string output_file = argv[4];
+    ofstream outfile(output_file);
     if (!outfile.is_open()) {
         cerr << "Error: Unable to open output file: output.txt" << endl;
         return;
