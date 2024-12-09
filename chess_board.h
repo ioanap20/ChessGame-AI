@@ -18,7 +18,7 @@ struct chess_board{
         
     vector<shared_ptr<pair_t>> next_move(std::string color);
 
-    void output_move(vector<shared_ptr<pair_t>>next_move);
+    void output_move(vector<shared_ptr<pair_t>>next_move, char* argv[]);
 
     chess_board();
 };

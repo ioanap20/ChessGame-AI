@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
     
     board.move(*next_move[0], *next_move[1]);
     
-    board.output_move(next_move);
+    board.output_move(next_move, argv);
     
     cout << read.color_ai << " moved and the output is:" << endl;
 
