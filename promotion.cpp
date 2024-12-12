@@ -1,15 +1,15 @@
 
 #include <iostream>
 #include "piece.h"
-#include "chessboard.h"
+#include "chess_board.h"
 
 /* 
 
 is_promotion_valid() --- checks if we are in a situation to promote
 do_promotion() --- carry out the promotion
 
-
 */
+
 
  
 
@@ -42,9 +42,9 @@ bool is_promotion_valid (piece_t piece, char* our_colour) { //"char*"" --> "stri
         else {
             return false;
         }
-    }
-    
+    }  
 }
+
 
 
 move do_promotion () {
