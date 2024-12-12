@@ -29,9 +29,10 @@ struct piece_t{
     std::shared_ptr<pair_t> pos;  // to get the actual position of the piece you need to call *p
     std::string color;
     std::string id;
+    bool is_moved = false;
 
-    piece_t(std::shared_ptr<pair_t> pos, std::string color, std::string id)
-        : pos(pos), color(color), id(id) {};
+    piece_t(std::shared_ptr<pair_t> pos, std::string color, std::string id, bool is_moved)
+        : pos(pos), color(color), id(id), is_moved(false) {};
     
     //possible moves
     std::vector<std::shared_ptr<pair_t>> moves(std::map<pair_t, std::shared_ptr<piece_t>> board );
@@ -61,37 +62,37 @@ struct piece_t{
 
 struct king_t : piece_t{
     king_t(std::shared_ptr<pair_t> pos, std::string color) 
-        : piece_t(pos, color, "king") {};
+        : piece_t(pos, color, "king", false) {};
     std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
 };
 
 struct rook_t : piece_t{
     rook_t(std::shared_ptr<pair_t> pos, std::string color) 
-        : piece_t(pos, color, "rook") {};
+        : piece_t(pos, color, "rook", false) {};
     std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
 };
 
 struct bishop_t : piece_t{
     bishop_t(std::shared_ptr<pair_t> pos, std::string color) 
-        : piece_t(pos, color, "bishop") {};
+        : piece_t(pos, color, "bishop", false) {};
     std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
 };
 
 struct horse_t : piece_t{
     horse_t(std::shared_ptr<pair_t> pos, std::string color) 
-        : piece_t(pos, color, "horse") {};
+        : piece_t(pos, color, "horse", false) {};
     std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
 };
 
 struct queen_t : piece_t{
     queen_t(std::shared_ptr<pair_t> pos, std::string color) 
-        : piece_t(pos, color, "queen") {};
+        : piece_t(pos, color, "queen", false) {};
     std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
 };
 
 struct pawn_t : piece_t{
     pawn_t(std::shared_ptr<pair_t> pos, std::string color) 
-        : piece_t(pos, color, "pawn") {};
+        : piece_t(pos, color, "pawn", false) {};
     std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
 };
 
@@ -101,6 +102,7 @@ struct pawn_t : piece_t{
 std::ostream& operator<<(std::ostream& os, const pair_t& pair);
 std::ostream& operator<<(std::ostream& os, const piece_t& piece);
 std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<piece_t>>& pieces);
+
 
 #endif
 

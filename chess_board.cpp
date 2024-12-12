@@ -2,10 +2,14 @@
 #include <vector>
 #include <fstream>
 #include "chess_board.h"
+#include "reading.h"
 using namespace std;
 
 
-chess_board::chess_board() {
+chess_board::chess_board(string color_ai) {
+
+    vector <shared_ptr<piece_t>> whitePieces;
+    vector <shared_ptr<piece_t>> blackPieces;
 
     whitePieces = { make_shared<piece_t>(make_shared<pair_t>('a', 1), "white", "rook"),
         make_shared<piece_t>(make_shared<pair_t>('b', 1), "white", "knight"),
@@ -34,6 +38,14 @@ chess_board::chess_board() {
     
     for (char col = 'a'; col <= 'h'; ++col) {
         blackPieces.push_back(make_shared<pawn_t>(make_shared<pair_t>(col, 7), "black"));
+    }
+
+    if(color_ai == "white"){
+        my_pieces = whitePieces;
+        enemy_pieces = blackPieces;
+    } else {
+        my_pieces = blackPieces;
+        enemy_pieces = whitePieces;
     }
         
 
@@ -83,6 +95,7 @@ void chess_board::move(pair_t from, pair_t to) {
 
     // Move the piece to the new position
     board[to] = initial_piece;
+    initial_piece->is_moved = true;
     
 }
 
