@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <map>
 
 #ifndef __PIECES__
 #define __PIECES__
@@ -27,14 +28,13 @@ struct pair_t{
 struct piece_t{
     std::shared_ptr<pair_t> pos;  // to get the actual position of the piece you need to call *p
     std::string color;
-    bool taken;
     std::string id;
 
     piece_t(std::shared_ptr<pair_t> pos, std::string color, std::string id)
-        : pos(pos), color(color), taken(false), id(id) {};
+        : pos(pos), color(color), id(id) {};
     
     //possible moves
-    std::vector<std::shared_ptr<pair_t>> moves(std::vector<std::shared_ptr<piece_t>>& pieces);
+    std::vector<std::shared_ptr<pair_t>> moves(std::map<pair_t, std::shared_ptr<piece_t>> board );
     //only takes into account board limitations
     virtual std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const {return {};}
 

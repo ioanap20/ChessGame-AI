@@ -1,5 +1,6 @@
 #include <iostream>
 #include "piece.h"
+#include <map>
 #include <algorithm>
 
 
@@ -24,28 +25,20 @@ bool is_position_in_grid(int index_x, int index_y){
     return index_x>=0 && index_x<= 7 &&index_y>=0 && index_y<= 7;
 }
 
-//given a vector containing positions, and a vector containing pieces and a piece itself, outputs a 
-//vector containing only positions where no friendly piece is
-std::vector<std::shared_ptr<pair_t>> remove_friendly_pos(piece_t cur, std::vector<std::shared_ptr<pair_t>>& positions, std::vector<std::shared_ptr<piece_t>>& pieces){
-    std::vector<std::shared_ptr<pair_t>> to_remove;
+//given a vector containing positions, and a board containing (position, piece) and a piece itself, outputs a vector containing only positions where no friendly piece is
+std::vector<std::shared_ptr<pair_t>> remove_friendly_pos(piece_t cur, std::vector<std::shared_ptr<pair_t>>& positions, std::map<pair_t, std::shared_ptr<piece_t>> board){
+    std::vector<std::shared_ptr<pair_t>> ok_pos;
     for (auto& pos : positions){
-        for (auto& piece : pieces){
-            if (*pos == *((*piece).pos) ){
-                if (cur.color == (*piece).color){
-                    to_remove.push_back(pos);
-                }
+        auto it = board.find(*pos);  // we extract an iterator to the (key,value) pair of map and check if the key we are looking for is inside map
+        if (it!=board.end()){  // if the key is indeed inside the map we check the color of the pieces and add if its a different color
+            if (it->second->color != cur.color){
+                ok_pos.push_back(pos);
             }
+        } else {
+            ok_pos.push_back(pos);  // if the key isn't inside the map then there are no pieces at this position so all is good
         }
     }
-    for (auto& pos : to_remove){
-        std::cout<<"Trying to remove "<< *pos << std::endl;
-        positions.erase(std::remove_if(positions.begin(), positions.end(),
-                [&pos](const std::shared_ptr<pair_t>& p) {
-                    // Compare the pointed-to pair_t objects
-                    return *p == *pos;
-                }), positions.end());
-    }
-    return positions;
+    return ok_pos;
 }
 
 /*--------------------------------------------------------------------------------------------------------*/
@@ -53,7 +46,7 @@ std::vector<std::shared_ptr<pair_t>> remove_friendly_pos(piece_t cur, std::vecto
 /*--------------------------------------------------------------------------------------------------------*/
 
 //pawn
-std::vector<std::shared_ptr<pair_t>> pawn_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::vector<std::shared_ptr<piece_t>>& pieces){
+std::vector<std::shared_ptr<pair_t>> pawn_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::map<pair_t, std::shared_ptr<piece_t>> board){
     std::vector<std::shared_ptr<pair_t>> vertical_pos;
     std::vector<std::shared_ptr<pair_t>> diag_pos;
     for (auto& pos : pos_positions){
@@ -61,15 +54,13 @@ std::vector<std::shared_ptr<pair_t>> pawn_moves(piece_t& cur, std::vector<std::s
     }
     std::vector<std::shared_ptr<pair_t>> ok_positions;
 
-    //sifting vertical positions
-    bool cond = true;
+    //sifting vertical positions -- we stop when we encounter the first piece (we cannot eat any white or black pieces moving forward)
+    bool cond = true; // cond is a boolean to indicate if we continue the loop or not (if we have encountered a piece)
     for (auto& pos : vertical_pos){
         if (!cond){ break;}
-        for (auto& piece : pieces){
-            if (*pos == *((*piece).pos)){
-                cond = false;
-                break;
-            }
+        auto it = board.find(*pos);
+        if (it!=board.end()){
+            cond = false;
         }
         if (cond){
             ok_positions.push_back(pos);
@@ -78,24 +69,18 @@ std::vector<std::shared_ptr<pair_t>> pawn_moves(piece_t& cur, std::vector<std::s
 
     //sifting diagonal positions -- only can go where opponent piece
     for (auto& pos: diag_pos){
-        cond = true;
-        for (auto& piece : pieces){
-            if (*pos == *((*piece).pos)){
-                if (cur.color!=(*piece).color){
-                    cond = false;
-                    break;
-                }
+        auto it = board.find(*pos);
+        if (it!=board.end()){
+            if (it->second->color != cur.color){
+                ok_positions.push_back(pos);
             }
-        }
-        if (!cond){
-            ok_positions.push_back(pos);
         }
     }
     return ok_positions;
 }
 
 //rook
-std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::vector<std::shared_ptr<piece_t>>& pieces){
+std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::map<pair_t, std::shared_ptr<piece_t>> board){
     std::vector<std::shared_ptr<pair_t>> vert_pos;
     std::vector<std::shared_ptr<pair_t>> hor_pos;
     for (auto& pos : pos_positions){ ((*pos).x == (*(cur.pos)).x ? vert_pos : hor_pos).push_back(pos);}
@@ -118,19 +103,18 @@ std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::s
     std::sort(hor_pos_below.begin(), hor_pos_below.end(), [](const std::shared_ptr<pair_t>& a, const std::shared_ptr<pair_t>& b){
         return a->x>b->x;
     });
+
     std::vector<std::shared_ptr<pair_t>> ok_positions;
     //sifting positions
     bool cond = true;
     for (auto& pos : vert_pos_above){
         if (!cond){ break;}
-        for (auto& piece : pieces){
-            if (*pos == *((*piece).pos)){
-                if (cur.color!=(*piece).color){
-                    ok_positions.push_back(pos);
-                }
-                cond = false;
-                break;
+        auto it = board.find(*pos);
+        if (it!=board.end()){
+            if (it->second->color != cur.color){
+                ok_positions.push_back(pos);
             }
+            cond = false;
         }
         if (cond){
             ok_positions.push_back(pos);
@@ -139,14 +123,12 @@ std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::s
     cond = true;
     for (auto& pos : vert_pos_below){
         if (!cond){ break;}
-        for (auto& piece : pieces){
-            if (*pos == *((*piece).pos)){
-                if (cur.color!=(*piece).color){
-                    ok_positions.push_back(pos);
-                }
-                cond = false;
-                break;
+        auto it = board.find(*pos);
+        if (it!=board.end()){
+            if (it->second->color != cur.color){
+                ok_positions.push_back(pos);
             }
+            cond = false;
         }
         if (cond){
             ok_positions.push_back(pos);
@@ -155,14 +137,12 @@ std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::s
     cond = true;
     for (auto& pos : hor_pos_above){
         if (!cond){ break;}
-        for (auto& piece : pieces){
-            if (*pos == *((*piece).pos)){
-                if (cur.color!=(*piece).color){
-                    ok_positions.push_back(pos);
-                }
-                cond = false;
-                break;
+        auto it = board.find(*pos);
+        if (it!=board.end()){
+            if (it->second->color != cur.color){
+                ok_positions.push_back(pos);
             }
+            cond = false;
         }
         if (cond){
             ok_positions.push_back(pos);
@@ -171,14 +151,12 @@ std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::s
     cond = true;
     for (auto& pos : hor_pos_below){
         if (!cond){ break;}
-        for (auto& piece : pieces){
-            if (*pos == *((*piece).pos)){
-                if (cur.color!=(*piece).color){
-                    ok_positions.push_back(pos);
-                }
-                cond = false;
-                break;
+        auto it = board.find(*pos);
+        if (it!=board.end()){
+            if (it->second->color != cur.color){
+                ok_positions.push_back(pos);
             }
+            cond = false;
         }
         if (cond){
             ok_positions.push_back(pos);
@@ -188,7 +166,7 @@ std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::s
 }
 
 //bishop
-std::vector<std::shared_ptr<pair_t>> bishop_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::vector<std::shared_ptr<piece_t>>& pieces){
+std::vector<std::shared_ptr<pair_t>> bishop_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::map<pair_t,std::shared_ptr<piece_t>> board){
     std::vector<std::shared_ptr<pair_t>> maindiag_pos; // /
     std::vector<std::shared_ptr<pair_t>> antidiag_pos; // // "\"
     for (auto& pos : pos_positions){ ((pos->x - pos->y)== ((*(cur.pos)).x - (*(cur.pos)).y) ? maindiag_pos : antidiag_pos).push_back(pos);}
@@ -215,14 +193,12 @@ std::vector<std::shared_ptr<pair_t>> bishop_moves(piece_t& cur, std::vector<std:
     bool cond = true;
     for (auto& pos : maindiag_above){
         if (!cond){ break;}
-        for (auto& piece : pieces){
-            if (*pos == *((*piece).pos)){
-                if (cur.color!=(*piece).color){
-                    ok_positions.push_back(pos);
-                }
-                cond = false;
-                break;
+        auto it = board.find(*pos);
+        if (it!=board.end()){
+            if (it->second->color != cur.color){
+                ok_positions.push_back(pos);
             }
+            cond = false;
         }
         if (cond){
             ok_positions.push_back(pos);
@@ -231,14 +207,12 @@ std::vector<std::shared_ptr<pair_t>> bishop_moves(piece_t& cur, std::vector<std:
     cond = true;
     for (auto& pos : maindiag_below){
         if (!cond){ break;}
-        for (auto& piece : pieces){
-            if (*pos == *((*piece).pos)){
-                if (cur.color!=(*piece).color){
-                    ok_positions.push_back(pos);
-                }
-                cond = false;
-                break;
+        auto it = board.find(*pos);
+        if (it!=board.end()){
+            if (it->second->color != cur.color){
+                ok_positions.push_back(pos);
             }
+            cond = false;
         }
         if (cond){
             ok_positions.push_back(pos);
@@ -247,14 +221,12 @@ std::vector<std::shared_ptr<pair_t>> bishop_moves(piece_t& cur, std::vector<std:
     cond = true;
     for (auto& pos : antidiag_above){
         if (!cond){ break;}
-        for (auto& piece : pieces){
-            if (*pos == *((*piece).pos)){
-                if (cur.color!=(*piece).color){
-                    ok_positions.push_back(pos);
-                }
-                cond = false;
-                break;
+        auto it = board.find(*pos);
+        if (it!=board.end()){
+            if (it->second->color != cur.color){
+                ok_positions.push_back(pos);
             }
+            cond = false;
         }
         if (cond){
             ok_positions.push_back(pos);
@@ -263,14 +235,12 @@ std::vector<std::shared_ptr<pair_t>> bishop_moves(piece_t& cur, std::vector<std:
     cond = true;
     for (auto& pos : antidiag_below){
         if (!cond){ break;}
-        for (auto& piece : pieces){
-            if (*pos == *((*piece).pos)){
-                if (cur.color!=(*piece).color){
-                    ok_positions.push_back(pos);
-                }
-                cond = false;
-                break;
+        auto it = board.find(*pos);
+        if (it!=board.end()){
+            if (it->second->color != cur.color){
+                ok_positions.push_back(pos);
             }
+            cond = false;
         }
         if (cond){
             ok_positions.push_back(pos);
@@ -280,33 +250,33 @@ std::vector<std::shared_ptr<pair_t>> bishop_moves(piece_t& cur, std::vector<std:
 }
 
 //queen moves
-std::vector<std::shared_ptr<pair_t>> queen_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::vector<std::shared_ptr<piece_t>>& pieces){
+std::vector<std::shared_ptr<pair_t>> queen_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::map<pair_t, std::shared_ptr<piece_t>> board){
     std::vector<std::shared_ptr<pair_t>> vert_hor_pos;
     std::vector<std::shared_ptr<pair_t>> diag_pos;
     for (auto& pos : pos_positions){(((pos->x==(*(cur.pos)).x)||(pos->y==(*(cur.pos)).y)) ? vert_hor_pos : diag_pos).push_back(pos);}
-    std::vector<std::shared_ptr<pair_t>> verthor_ok_pos = rook_moves(cur, vert_hor_pos, pieces);
-    std::vector<std::shared_ptr<pair_t>> diag_ok_pos = bishop_moves(cur, diag_pos, pieces);
+    std::vector<std::shared_ptr<pair_t>> verthor_ok_pos = rook_moves(cur, vert_hor_pos, board);
+    std::vector<std::shared_ptr<pair_t>> diag_ok_pos = bishop_moves(cur, diag_pos, board);
     verthor_ok_pos.insert(verthor_ok_pos.end(), diag_ok_pos.begin(), diag_ok_pos.end());
     return verthor_ok_pos;
 }
 
 
 //global = works for knight and king on its own otherwise it calls the other functions
-std::vector<std::shared_ptr<pair_t>> piece_t::moves(std::vector<std::shared_ptr<piece_t>>& pieces){
+std::vector<std::shared_ptr<pair_t>> piece_t::moves(std::map<pair_t, std::shared_ptr<piece_t>> board){
     auto neighbors = moves_no_constraints();
     if (id=="pawn"){
-        return pawn_moves(*this, neighbors, pieces);
+        return pawn_moves(*this, neighbors, board);
     }
     if (id=="rook"){
-        return rook_moves(*this, neighbors, pieces);
+        return rook_moves(*this, neighbors, board);
     }
     if (id=="bishop"){
-        return bishop_moves(*this, neighbors, pieces);
+        return bishop_moves(*this, neighbors, board);
     }
     if (id=="queen"){
-        return queen_moves(*this, neighbors, pieces);
+        return queen_moves(*this, neighbors, board);
     }
-    auto ok_neighbors = remove_friendly_pos(*this, neighbors, pieces);
+    auto ok_neighbors = remove_friendly_pos(*this, neighbors, board);
     return ok_neighbors;
 };
 
@@ -522,7 +492,7 @@ std::ostream& operator<<(std::ostream& os, const pair_t& pair) {
 }
 
 std::ostream& operator<<(std::ostream& os, const piece_t& piece) {
-    return os << piece.color << " " << piece.id << " at " << *piece.pos << "  Status: " << piece.taken;
+    return os << piece.color << " " << piece.id << " at " << *piece.pos;
 }
 
 std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<piece_t>>& pieces) {
@@ -537,6 +507,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<pie
 /*--------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------LOCAL TESTING-----------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------*/
+
 /*
 int main(int argc, char* argv[]){
     // Example usage 
@@ -544,10 +515,11 @@ int main(int argc, char* argv[]){
 
     rook_t rook(std::make_shared<pair_t>('g', 5), "white");
     pawn_t wpawn(std::make_shared<pair_t>('g', 6), "white");
-    pawn_t bpawn(std::make_shared<pair_t>('b', 6), "black");
-    bishop_t bishop(std::make_shared<pair_t>('g',2), "white");
+    pawn_t bpawn(std::make_shared<pair_t>('c', 7), "black");
+    bishop_t bishop(std::make_shared<pair_t>('g',3), "white");
     king_t king(std::make_shared<pair_t>('f', 2), "white");
     queen_t queen(std::make_shared<pair_t>('d', 6), "white");
+    horse_t knight(std::make_shared<pair_t>('c',6), "white");
 
     pieces.push_back(std::make_shared<king_t>(king));
     pieces.push_back(std::make_shared<rook_t>(rook));
@@ -555,31 +527,41 @@ int main(int argc, char* argv[]){
     pieces.push_back(std::make_shared<pawn_t>(bpawn));
     pieces.push_back(std::make_shared<bishop_t>(bishop));
     pieces.push_back(std::make_shared<queen_t>(queen));
+    pieces.push_back(std::make_shared<piece_t>(knight));
 
     std::cout<<"Pieces on the board"<<std::endl;
     std::cout<<pieces<<std::endl;
+
+    std::map<pair_t, std::shared_ptr<piece_t>> board;
+    for (auto& piece : pieces){
+        board[*((*piece).pos)] = piece;
+    }
+
 
     // Output some values
     //std::cout<<king<<std::endl;
     //std::cout<<wpawn<<std::endl;
     //std::cout<<bpawn<<std::endl;
-    auto neigh = king.moves(pieces);
-    auto neigh1 = wpawn.moves(pieces);
-    auto neigh2 = bpawn.moves(pieces);
-    auto rook_moves = rook.moves(pieces);
-    auto bishop_moves = bishop.moves(pieces);
-    auto queen_moves = queen.moves(pieces);
+    auto neigh = king.moves(board);
+    auto neigh1 = wpawn.moves(board);
+    auto neigh2 = bpawn.moves(board);
+    auto rook_moves = rook.moves(board);
+    auto bishop_moves = bishop.moves(board);
+    auto queen_moves = queen.moves(board);
+    auto knight_moves = knight.moves(board);
     //std::cout<<"King's possible moves"<<std::endl;
     //display_positions(neigh);
-    //std::cout<<"White Pawn's possible moves"<<std::endl;
-    //display_positions(neigh1);
-    //std::cout<<"Black Pawn's possible moves"<<std::endl;
-    //display_positions(neigh2);
+    std::cout<<"White Pawn's possible moves"<<std::endl;
+    display_positions(neigh1);
+    std::cout<<"Black Pawn's possible moves"<<std::endl;
+    display_positions(neigh2);
     std::cout<<"Rook's Possible moves"<<std::endl;
     display_positions(rook_moves);
     std::cout<<"Bishop's possible moves"<<std::endl;
     display_positions(bishop_moves);
     std::cout<<"Queen's possible moves"<<std::endl;
     display_positions(queen_moves);
+    std::cout<<"Knight's possible moves"<<std::endl;
+    display_positions(knight_moves);
     return 0;
 } */
