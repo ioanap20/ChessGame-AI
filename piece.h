@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <map>
 
 #ifndef __PIECES__
 #define __PIECES__
@@ -15,23 +16,45 @@ struct pair_t{
     bool operator==(const pair_t& other) const {
         return x==other.x && y==other.y;
     };
+    bool operator<(const pair_t& other) const {
+    if (x == other.x) {
+        return y < other.y; 
+    } else {
+        return x < other.x; 
+    }
+}
 };
 
 struct piece_t{
     std::shared_ptr<pair_t> pos;  // to get the actual position of the piece you need to call *p
     std::string color;
-    bool taken;
     std::string id;
 
     piece_t(std::shared_ptr<pair_t> pos, std::string color, std::string id)
-        : pos(pos), color(color), taken(false), id(id) {};
+        : pos(pos), color(color), id(id) {};
     
     //possible moves
-    std::vector<std::shared_ptr<pair_t>> moves(std::vector<std::shared_ptr<piece_t>>& pieces);
+    std::vector<std::shared_ptr<pair_t>> moves(std::map<pair_t, std::shared_ptr<piece_t>> board );
     //only takes into account board limitations
     virtual std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const {return {};}
 
     virtual ~piece_t() = default; 
+
+    bool operator<(const piece_t& other) const {
+        // Compare by color first (e.g., "black" < "white")
+        if (color != other.color)
+            return color < other.color;
+
+        // If colors are the same, compare by piece ID
+        if (id != other.id)
+            return id < other.id;
+
+        // If both color and ID are the same, compare by position
+        if (pos->x != other.pos->x)
+            return pos->x < other.pos->x;
+
+        return pos->y < other.pos->y;  // Compare y-coordinate as a final criterion
+    }
 
     // operator overloading 
 };
@@ -75,20 +98,11 @@ struct pawn_t : piece_t{
 
 /*------------------------------------OS OPERATOR OVERLOADING------------------------------------------------------*/
 
-std::int argc, char *argv[]stream& operator << (std::ostream& os, const pair_t& pair){
-    return os<<pair.x<<pair.y;
-};
 
-std::ostream& operator << (std::ostream& os, const piece_t& piece){
-    return os<<piece.color<<" "<<piece.id<<" at "<< *piece.pos<< "  Status : "<<piece.taken;
-};
+std::ostream& operator<<(std::ostream& os, const pair_t& pair);
+std::ostream& operator<<(std::ostream& os, const piece_t& piece);
+std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<piece_t>>& pieces);
 
-std::ostream& operator << (std::ostream& os, const std::vector<std::shared_ptr<piece_t>> pieces){
-    for (const auto& piece : pieces){
-        os<<*piece<<std::endl;
-    }
-    return os;
-}
 
 #endif
 

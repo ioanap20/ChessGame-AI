@@ -1,13 +1,19 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(King_moves
+project(chess_and_the_city
   VERSION 1.0
   LANGUAGES CXX)
 
-include_directories(.)
 
-add_library(myLibExample reading.cpp)
+add_library(lib_chess_and_the_city
+  reading.cpp
+  chess_board.cpp
+  piece.cpp
+  algo.cpp
+)
 
-add_executable(King_moves main.cpp)
+add_executable(chess_and_the_city
+  main.cpp
+)
 
-#target_link_libraries(chess_proj PRIVATE myLibExample)
+target_link_libraries(chess_and_the_city PRIVATE lib_chess_and_the_city)
