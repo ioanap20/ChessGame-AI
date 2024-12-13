@@ -21,9 +21,9 @@ struct chess_board{
 
     void output_move(vector<shared_ptr<pair_t>>next_move, char* argv[]);
 
-    chess_board(string color_ai); 
+    chess_board(); 
 };
 
-extern tuple<bool, bool> is_castling(const chess_board& board, const std::string& color, bool kingside);
+extern map<string, bool> is_castling(const chess_board& board, const string& color);
 
 #endif

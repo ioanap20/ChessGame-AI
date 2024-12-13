@@ -61,6 +61,8 @@ void reading::update_board(chess_board& board)
     initial.x = move[0]
     boardMap.move(initial, final);*/
 
+    
+
     for (size_t i = 0; i < moves.size(); ++i) {
         const string& move = moves[i];
 
