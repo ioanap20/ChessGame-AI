@@ -12,16 +12,17 @@ int main(int argc, char* argv[]) {
     
     chess_board board;
 
-    //cout << "Initial board:" << endl;
+    cout << "Initial board:" << endl;
 
-    //board.display_chess_board();
+    board.display_chess_board();
 
     reading read(argc, argv, board);
-    board.color_ai = read.color_ai;
 
-    //cout << "After reading:" << endl;
+    board.set_pieces(read.color_ai);
+
+    cout << "After reading:" << endl;
     
-    //board.display_chess_board();
+    board.display_chess_board();
 
     auto next_move = board.next_move(read.color_ai);
     
@@ -29,7 +30,5 @@ int main(int argc, char* argv[]) {
     
     board.output_move(next_move, argv);
     
-   // cout << read.color_ai << " moved and the output is:" << endl;
-
-    //board.display_chess_board();
+    board.display_chess_board();
 }

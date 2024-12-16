@@ -85,9 +85,7 @@ return castling_status;
 
 }
 
-// do a function castle(board, color, side) that moves the king and the rook to the right positions
-
-std::pair<pair_t, pair_t> castle(chess_board& board, const std::string& color_ai, const std::string side) {
+std::pair<pair_t, pair_t> castle(chess_board& board, const std::string& color_ai, const std::string& side) {
     int row = (color_ai == "white") ? 1 : 8; // Determine the row based on color
     pair_t king_from('e', row);
     pair_t rook_from('h', row);
