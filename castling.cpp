@@ -13,6 +13,7 @@ map<string, bool> is_castling(const chess_board& chess_board, const string& colo
     
     int row = (color_ai == "white") ? 1 : 8;
     shared_ptr<piece_t> king;
+    shared_ptr<piece_t> queen;
     shared_ptr<piece_t> kingside_rook;
     shared_ptr<piece_t> queenside_rook;
 
@@ -25,6 +26,14 @@ map<string, bool> is_castling(const chess_board& chess_board, const string& colo
         }
     }
     
+    // check if the queen has moved
+    pair_t queen_pos('e', row);
+    if (chess_board.board.find(queen_pos) != chess_board.board.end()) {
+        queen = chess_board.board.at(queen_pos);
+        if (queen->id == "queen" || queen->is_moved) {
+            return castling_status;
+        }
+    }
 
 
     // helper function to check if the path is clear
@@ -59,7 +68,16 @@ map<string, bool> is_castling(const chess_board& chess_board, const string& colo
     }
 
 // check if it can castle on the queens_side
-    
+    pair_t queenside_rook_pos('a', row);
+    if (chess_board.board.find(queenside_rook_pos) != chess_board.board.end()) {
+        queenside_rook = chess_board.board.at(queenside_rook_pos);
+        if (queenside_rook->id == "rook" && !queenside_rook->is_moved) {
+            if (is_path_clear('e', 'a')) {
+                castling_status["queenside"] = true;
+            }
+        }
+    }
+
 
 
 
