@@ -13,7 +13,6 @@ map<string, bool> is_castling(const chess_board& chess_board, const string& colo
     
     int row = (color_ai == "white") ? 1 : 8;
     shared_ptr<piece_t> king;
-    shared_ptr<piece_t> queen;
     shared_ptr<piece_t> kingside_rook;
     shared_ptr<piece_t> queenside_rook;
 
@@ -25,16 +24,6 @@ map<string, bool> is_castling(const chess_board& chess_board, const string& colo
             return castling_status;
         }
     }
-    
-    // check if the queen has moved
-    pair_t queen_pos('e', row);
-    if (chess_board.board.find(queen_pos) != chess_board.board.end()) {
-        queen = chess_board.board.at(queen_pos);
-        if (queen->id == "queen" || queen->is_moved) {
-            return castling_status;
-        }
-    }
-
 
     // helper function to check if the path is clear
     auto is_path_clear = [&](char start, char end) {
@@ -48,6 +37,7 @@ map<string, bool> is_castling(const chess_board& chess_board, const string& colo
     };
 
 // check if there are any pieces between the king and the rook for both kingside and queenside
+
 
 // check if is_check for the king before and after castling
 
@@ -79,18 +69,17 @@ map<string, bool> is_castling(const chess_board& chess_board, const string& colo
     }
 
 
-
-
 return castling_status;
 
 }
 
 std::pair<pair_t, pair_t> castle(chess_board& board, const std::string& color_ai, const std::string& side) {
     int row = (color_ai == "white") ? 1 : 8; // Determine the row based on color
-    pair_t king_from('e', row);
-    pair_t rook_from('h', row);
-    
+    pair_t king_from('e', row); // starting pos of king
+
     if (side == "kingside") {
+        pair_t rook_from('h', row);
+
         // Move the king from e1/e8 to g1/g8
         pair_t king_to('g', row);
 
@@ -100,11 +89,24 @@ std::pair<pair_t, pair_t> castle(chess_board& board, const std::string& color_ai
         // Update the board
         board.move(king_from, king_to);
         board.move(rook_from, rook_to);
+        
+        // need to change is_moved to true
+        return {king_from, rook_from};
     } 
 
-    // else if (side == "queenside") {
+    else if (side == "queenside") {
+        pair_t rook_from('a', row);
 
+        // Move king from e1/8 to c1/8
+        pair_t king_to('c', row);
+        // Move rook from a1/8 to d1/8
+        pair_t rook_to('d', row);
 
+        board.move(king_from, king_to);
+        board.move(rook_from, rook_to);
 
-    return {king_from, rook_from};
+        // need to change is_moved to true
+
+        return {king_from, rook_from};
+    }
 }
