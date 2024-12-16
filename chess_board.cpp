@@ -8,9 +8,6 @@ using namespace std;
 
 chess_board::chess_board() {
 
-    vector <shared_ptr<piece_t>> whitePieces;
-    vector <shared_ptr<piece_t>> blackPieces;
-
     // white pieces (row 1)
 
     whitePieces.push_back(std::make_shared<rook_t>(std::make_shared<pair_t>('a', 1), "white"));
@@ -42,15 +39,6 @@ chess_board::chess_board() {
         blackPieces.push_back(std::make_shared<pawn_t>(std::make_shared<pair_t>(col, 7), "black"));
     }
 
-    if(color_ai == "white"){
-        my_pieces = whitePieces;
-        enemy_pieces = blackPieces;
-    } else {
-        my_pieces = blackPieces;
-        enemy_pieces = whitePieces;
-    }
-        
-
     allPieces.reserve(whitePieces.size() + blackPieces.size());
     allPieces.insert(allPieces.end(), whitePieces.begin(), whitePieces.end());
     allPieces.insert(allPieces.end(), blackPieces.begin(), blackPieces.end());
@@ -67,6 +55,17 @@ chess_board::chess_board() {
         piece->is_moved = false;
     } 
     
+}
+
+void chess_board :: set_pieces(string color){
+    color_ai = color;
+    if(color_ai == "white"){
+        my_pieces = whitePieces;
+        enemy_pieces = blackPieces;
+    } else {
+        my_pieces = blackPieces;
+        enemy_pieces = whitePieces;
+    }
 }
 
 void chess_board::move(pair_t from, pair_t to) {
