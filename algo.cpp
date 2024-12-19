@@ -3,16 +3,17 @@
 using namespace std;
 
 vector<shared_ptr<pair_t>> chess_board::next_move(std::string color){
-    vector<shared_ptr<piece_t>> my_pieces;
+    /*vector<shared_ptr<piece_t>> my_pieces;
     vector<shared_ptr<piece_t>> opponent_pieces;
     if (color=="white"){
         my_pieces = whitePieces;
         opponent_pieces = blackPieces;
-    } else { my_pieces = blackPieces; opponent_pieces = whitePieces;}
+    } else { my_pieces = blackPieces; opponent_pieces = whitePieces;}*/
 
     map<piece_t, vector<shared_ptr<pair_t>>> piece_to_move;
     for (auto& piece : my_pieces){
-        piece_to_move[*piece] = (*piece).moves(allPieces);
+        //piece_to_move[*piece] = (*piece).moves(allPieces);
+        piece_to_move[*piece] = (*piece).moves(board);
         for (auto& move : piece_to_move[*piece]){
             if (board.find(*move)!=board.end()){
                 if ((*piece).color != (*board[(*move)]).color){

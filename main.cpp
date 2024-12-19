@@ -18,6 +18,8 @@ int main(int argc, char* argv[]) {
 
     reading read(argc, argv, board);
 
+    board.set_pieces(read.color_ai);
+
     cout << "After reading:" << endl;
     
     board.display_chess_board();
@@ -28,7 +30,5 @@ int main(int argc, char* argv[]) {
     
     board.output_move(next_move, argv);
     
-    cout << read.color_ai << " moved and the output is:" << endl;
-
     board.display_chess_board();
 }

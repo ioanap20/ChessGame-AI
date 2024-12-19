@@ -2,40 +2,42 @@
 #include <vector>
 #include <fstream>
 #include "chess_board.h"
+#include "reading.h"
 using namespace std;
 
 
 chess_board::chess_board() {
 
-    whitePieces = { make_shared<piece_t>(make_shared<pair_t>('a', 1), "white", "rook"),
-        make_shared<piece_t>(make_shared<pair_t>('b', 1), "white", "knight"),
-        make_shared<piece_t>(make_shared<pair_t>('c', 1), "white", "bishop"),
-        make_shared<piece_t>(make_shared<pair_t>('d', 1), "white", "queen"),
-        make_shared<piece_t>(make_shared<pair_t>('e', 1), "white", "king"),
-        make_shared<piece_t>(make_shared<pair_t>('f', 1), "white", "bishop"),
-        make_shared<piece_t>(make_shared<pair_t>('g', 1), "white", "knight"),
-        make_shared<piece_t>(make_shared<pair_t>('h', 1), "white", "rook")
-    };
+    // white pieces (row 1)
 
+    whitePieces.push_back(std::make_shared<rook_t>(std::make_shared<pair_t>('a', 1), "white"));
+    whitePieces.push_back(std::make_shared<horse_t>(std::make_shared<pair_t>('b', 1), "white"));
+    whitePieces.push_back(std::make_shared<bishop_t>(std::make_shared<pair_t>('c', 1), "white"));
+    whitePieces.push_back(std::make_shared<queen_t>(std::make_shared<pair_t>('d', 1), "white"));
+    whitePieces.push_back(std::make_shared<king_t>(std::make_shared<pair_t>('e', 1), "white"));
+    whitePieces.push_back(std::make_shared<bishop_t>(std::make_shared<pair_t>('f', 1), "white"));
+    whitePieces.push_back(std::make_shared<horse_t>(std::make_shared<pair_t>('g', 1), "white"));
+    whitePieces.push_back(std::make_shared<rook_t>(std::make_shared<pair_t>('h', 1), "white"));
+
+    // white pawns (row 2)
     for (char col = 'a'; col <= 'h'; ++col) {
-        whitePieces.push_back(make_shared<pawn_t>(make_shared<pair_t>(col, 2), "white"));
+        whitePieces.push_back(std::make_shared<pawn_t>(std::make_shared<pair_t>(col, 2), "white"));
     }
 
-    blackPieces = {
-        make_shared<piece_t>(make_shared<pair_t>('a', 8), "black", "rook"),
-        make_shared<piece_t>(make_shared<pair_t>('b', 8), "black", "knight"),
-        make_shared<piece_t>(make_shared<pair_t>('c', 8), "black", "bishop"),
-        make_shared<piece_t>(make_shared<pair_t>('d', 8), "black", "queen"),
-        make_shared<piece_t>(make_shared<pair_t>('e', 8), "black", "king"),
-        make_shared<piece_t>(make_shared<pair_t>('f', 8), "black", "bishop"),
-        make_shared<piece_t>(make_shared<pair_t>('g', 8), "black", "knight"),
-        make_shared<piece_t>(make_shared<pair_t>('h', 8), "black", "rook"),
-    };
-    
+    // black pieces (row 8)
+    blackPieces.push_back(std::make_shared<rook_t>(std::make_shared<pair_t>('a', 8), "black"));
+    blackPieces.push_back(std::make_shared<horse_t>(std::make_shared<pair_t>('b', 8), "black"));
+    blackPieces.push_back(std::make_shared<bishop_t>(std::make_shared<pair_t>('c', 8), "black"));
+    blackPieces.push_back(std::make_shared<queen_t>(std::make_shared<pair_t>('d', 8), "black"));
+    blackPieces.push_back(std::make_shared<king_t>(std::make_shared<pair_t>('e', 8), "black"));
+    blackPieces.push_back(std::make_shared<bishop_t>(std::make_shared<pair_t>('f', 8), "black"));
+    blackPieces.push_back(std::make_shared<horse_t>(std::make_shared<pair_t>('g', 8), "black"));
+    blackPieces.push_back(std::make_shared<rook_t>(std::make_shared<pair_t>('h', 8), "black"));
+
+    // black pawns (row 7)
     for (char col = 'a'; col <= 'h'; ++col) {
-        blackPieces.push_back(make_shared<pawn_t>(make_shared<pair_t>(col, 7), "black"));
+        blackPieces.push_back(std::make_shared<pawn_t>(std::make_shared<pair_t>(col, 7), "black"));
     }
-        
 
     allPieces.reserve(whitePieces.size() + blackPieces.size());
     allPieces.insert(allPieces.end(), whitePieces.begin(), whitePieces.end());
@@ -44,23 +46,26 @@ chess_board::chess_board() {
     // Initialize white pieces
     for (const auto& piece : whitePieces) {
         board[*piece->pos] = piece;
+        piece->is_moved = false;
     }
 
     // Initialize black pieces
     for (const auto& piece : blackPieces) {
         board[*piece->pos] = piece;
+        piece->is_moved = false;
     } 
     
-    /*return {
-        'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r', // Black
-        'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 
-        '.', '.', '.', '.', '.', '.', '.', '.', 
-        '.', '.', '.', '.', '.', '.', '.', '.',
-        '.', '.', '.', '.', '.', '.', '.', '.',
-        '.', '.', '.', '.', '.', '.', '.', '.',
-        'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 
-        'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'  // White
-    };*/
+}
+
+void chess_board :: set_pieces(string color){
+    color_ai = color;
+    if(color_ai == "white"){
+        my_pieces = whitePieces;
+        enemy_pieces = blackPieces;
+    } else {
+        my_pieces = blackPieces;
+        enemy_pieces = whitePieces;
+    }
 }
 
 void chess_board::move(pair_t from, pair_t to) {
@@ -83,6 +88,7 @@ void chess_board::move(pair_t from, pair_t to) {
 
     // Move the piece to the new position
     board[to] = initial_piece;
+    initial_piece->is_moved = true;
     
 }
 
@@ -131,10 +137,4 @@ void chess_board::output_move(vector<shared_ptr<pair_t>> next_move, char* argv[]
     outfile << *next_move[0] << *next_move[1] << endl;
     
 }
-
-/*int main(){
-    std::vector<char> chess_board = initialize_chess_board();
-    print_chess_board(chess_board);
-    return 0;
-}*/
 

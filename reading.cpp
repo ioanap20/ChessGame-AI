@@ -45,9 +45,9 @@ vector<string> reading::readAllLines(int argc, char *argv[])
     // if i put an '\n' after the input it doesn't work anymore
     
     if (moves.size() % 2 == 0) {
-        color_ai = {"white"};
+        color_ai = "white";
     } else {
-        color_ai = {"black"};
+        color_ai = "black";
     } 
     
     infile.close();
@@ -64,6 +64,8 @@ void reading::update_board(chess_board& board)
     initial.x = move[0]
 
     boardMap.move(initial, final);*/
+
+    
 
     for (size_t i = 0; i < moves.size(); ++i) {
         const string& move = moves[i];
