@@ -5,10 +5,6 @@
 
 
 /*----------------------AUXILIARY FUNCTIONS FOR MOVE IMPLEMENTATION---------------------------------------*/
-//global variable to store the possible positions
-std::vector<char> letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
-std::vector<int> numbers = {1,2,3,4,5,6,7,8};
-
 // find the indices in the corresponding list (letters and numbers) given a position
 std::vector<int> find_pos_indexes(pair_t pos){
     auto it_x = std::find(letters.begin(), letters.end(), pos.x);

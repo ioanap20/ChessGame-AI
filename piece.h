@@ -103,6 +103,11 @@ std::ostream& operator<<(std::ostream& os, const pair_t& pair);
 std::ostream& operator<<(std::ostream& os, const piece_t& piece);
 std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<piece_t>>& pieces);
 
+/*-----------------------------------------global variables----------------------------------------------------------*/
+
+std::vector<char> letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+std::vector<int> numbers = {1,2,3,4,5,6,7,8};
+
 
 #endif
 
