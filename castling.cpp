@@ -10,6 +10,7 @@ using namespace std;
 map<string, bool> is_castling(const chess_board& chess_board, const string& color_ai) {   
     
     map<std::string, bool> castling_status = {{"kingside", false}, {"queenside", false}};
+    // if it can castle --> we initialize status to no
     
     int row = (color_ai == "white") ? 1 : 8;
     shared_ptr<piece_t> king;
@@ -40,6 +41,7 @@ map<string, bool> is_castling(const chess_board& chess_board, const string& colo
     };
 
     // helper function is_check if the king is in check
+    // agatha has is_check() (to be finished) --> for now, using this impl
     auto is_check = [&]() {
         for (const auto& [pos, piece] : chess_board.board) {    
             if (piece->color != color_ai) {  // Opponent's piece
@@ -79,13 +81,13 @@ map<string, bool> is_castling(const chess_board& chess_board, const string& colo
 
 // check if is_check for the king before and after castling
     if (is_check()){
-        std::cout << "The king is in check, cannot castle!" << std::endl; //necessary?
         castling_status["kingside"] = false;
         castling_status["queenside"] = false;
-        // NEED TO CHECK - if it is check, it cannot castle
+        // if in check, you cannot castle on either side
     }
-    
-    // TO DO: CHECK IS_CHECK AFTER CASTLING
+
+// TO DO: CHECK IS_CHECK AFTER CASTLING
+// after it has castled
 
 return castling_status;
 
