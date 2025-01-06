@@ -26,8 +26,11 @@ map<string, bool> is_castling(const chess_board& chess_board, const string& colo
     }
 
     // helper function to check if the path is clear
+    // gretl: i edited this to handle descending ranges as well (queenside)
     auto is_path_clear = [&](char start, char end) {
-        for (char col = start; col <= end; ++col) {
+        char lower = std::min(start, end);
+        char upper = std::max(start, end);
+        for (char col = lower + 1; col < upper; ++col) {
             pair_t pos(col, row);
             if (chess_board.board.find(pos) != chess_board.board.end()) {
                 return false; // A piece is blocking the path
@@ -36,17 +39,23 @@ map<string, bool> is_castling(const chess_board& chess_board, const string& colo
         return true;
     };
 
+    // helper function is_check if the king is in check
+    auto is_check = [&]() {
+        for (const auto& [pos, piece] : chess_board.board) {    
+            if (piece->color != color_ai) {  // Opponent's piece
+                auto potential_moves = piece->moves_no_constraints();
+                for (auto& move : potential_moves) {
+                    if (*move == king_pos) {
+                        return true;  // King is in check
+                    }
+                }
+            }
+        }
+        return false;  // King is not in check
+    };
+
 // check if there are any pieces between the king and the rook for both kingside and queenside
-
-
-// check if is_check for the king before and after castling
-
-// check if there are any pieces between the king and the rook for both kingside and queenside
-
-// check if is_check for the king before and after castling
-
 // check if it can castle on kings_side
-
     pair_t kingside_rook_pos('h', row);
     if (chess_board.board.find(kingside_rook_pos) != chess_board.board.end()) {
         kingside_rook = chess_board.board.at(kingside_rook_pos);
@@ -68,6 +77,15 @@ map<string, bool> is_castling(const chess_board& chess_board, const string& colo
         }
     }
 
+// check if is_check for the king before and after castling
+    if (is_check()){
+        std::cout << "The king is in check, cannot castle!" << std::endl; //necessary?
+        castling_status["kingside"] = false;
+        castling_status["queenside"] = false;
+        // NEED TO CHECK - if it is check, it cannot castle
+    }
+    
+    // TO DO: CHECK IS_CHECK AFTER CASTLING
 
 return castling_status;
 
