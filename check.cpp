@@ -4,31 +4,33 @@
 #include "chess_board.h"
 #include <iostream>
 #include <algorithm>
+/*
+std::vector<char> let = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+std::vector<int> num = {1,2,3,4,5,6,7,8};
+
+std::vector<int> find_pos_index(pair_t pos){
+    auto it_x = std::find(let.begin(), let.end(), pos.x);
+    auto it_y = std::find(num.begin(), num.end(), pos.y);
+    auto index_x = (int)std::distance(let.begin(), it_x);
+    auto index_y = (int)std::distance(num.begin(), it_y);
+
+    vector<int>  index_pos = {index_x, index_y};
+    return index_pos;
+};  */
 
 using namespace std;
-/*
-std::vector<int> find_pos_indexes(pair_t pos){
-    auto it_x = std::find(letters.begin(), letters.end(), pos.x);
-    auto it_y = std::find(numbers.begin(), numbers.end(), pos.y);
-    auto index_x = (int)std::distance(letters.begin(), it_x);
-    auto index_y = (int)std::distance(numbers.begin(), it_y);
-
-    std::vector<int>  index_pos = {index_x, index_y};
-    return index_pos;
-}; */
-
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------------------BASICS : IS_CHECK MOSTLY----------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*
+
 piece_t get_king(string color, chess_board chessboard){   // This function gets the piece of the king of a given color
     auto it = find_if((chessboard.allPieces).begin(), (chessboard.allPieces).end(), [color](const shared_ptr<piece_t>& piece){
                     return (*piece).id == "king" && (*piece).color==color;
                 });
     return **it;
 }
-*/
-/*
+
 vector<shared_ptr<piece_t>> is_check(chess_board chessboard){  // This function checks if our king is in a check position, that is, it computes a vector of all pieces that are threatening the king and returns them, if the vector is empty (check using vector.empty() which gives true if it is and false otherwise), then the king is not in a check position
     vector<shared_ptr<piece_t>> endangering_pieces;
     auto color = chessboard.color_ai;
@@ -64,8 +66,12 @@ vector<shared_ptr<pair_t>> get_path_to_king(piece_t king, piece_t opp_piece){
         res.push_back(opp_piece.pos);
         return res;
     }
-} */
-/*
+
+    vector<shared_ptr<pair_t>> tmp;
+    tmp.push_back(king.pos);
+    return tmp;
+} 
+
 vector<shared_ptr<pair_t>> path_to_king_rook(piece_t king, piece_t opp_piece){
     vector<shared_ptr<pair_t>> path;
     
@@ -85,13 +91,14 @@ vector<shared_ptr<pair_t>> path_to_king_rook(piece_t king, piece_t opp_piece){
         }
     } else {
         if (king_pos.x<opp_pos.x){
-            auto king_pos_idx = find_pos_indexes(king_pos);
-            auto opp_pos_idx = find_pos_indexes(opp_pos);
+            auto king_pos_idx = find_pos_index(king_pos);
+            auto opp_pos_idx = find_pos_index(opp_pos);
             for (int i = opp_pos_idx[0]; i==king_pos_idx[0]; i--){
-                path.push_back(make_shared<pair_t>(letters[i], king_pos.y));
+                path.push_back(make_shared<pair_t>(let[i], king_pos.y));
             }
         }
     }
+    return path;
 }
 */
 
@@ -140,5 +147,4 @@ int main(int argc, char* argv[]){
     }
 
     return 0;
-}
-*/
+} */

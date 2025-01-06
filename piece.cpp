@@ -6,11 +6,14 @@
 
 /*----------------------AUXILIARY FUNCTIONS FOR MOVE IMPLEMENTATION---------------------------------------*/
 // find the indices in the corresponding list (letters and numbers) given a position
+std::vector<char> lett = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+std::vector<int> numb = {1,2,3,4,5,6,7,8};
+
 std::vector<int> find_pos_indexes(pair_t pos){
-    auto it_x = std::find(letters.begin(), letters.end(), pos.x);
-    auto it_y = std::find(numbers.begin(), numbers.end(), pos.y);
-    auto index_x = (int)std::distance(letters.begin(), it_x);
-    auto index_y = (int)std::distance(numbers.begin(), it_y);
+    auto it_x = std::find(lett.begin(), lett.end(), pos.x);
+    auto it_y = std::find(numb.begin(), numb.end(), pos.y);
+    auto index_x = (int)std::distance(lett.begin(), it_x);
+    auto index_y = (int)std::distance(numb.begin(), it_y);
 
     std::vector<int>  index_pos = {index_x, index_y};
     return index_pos;
@@ -283,16 +286,16 @@ std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints() const{
     std::vector<int> index_pos = find_pos_indexes(actual_pos);
     std::vector<std::shared_ptr<pair_t>> possible_pos;
     if (is_position_in_grid(index_pos[0]+1, index_pos[1])){
-        possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]+1], numbers[index_pos[1]]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]+1], numb[index_pos[1]]));
     }
     if (is_position_in_grid(index_pos[0]-1, index_pos[1])){
-        possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]-1], numbers[index_pos[1]]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]-1], numb[index_pos[1]]));
     }
     if (is_position_in_grid(index_pos[0], index_pos[1]+1)){
-        possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]], numbers[index_pos[1]+1]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]], numb[index_pos[1]+1]));
     }
     if (is_position_in_grid(index_pos[0], index_pos[1]-1)){
-        possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]], numbers[index_pos[1]-1]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]], numb[index_pos[1]-1]));
     }
     return possible_pos;
 };
@@ -317,18 +320,18 @@ std::vector<std::shared_ptr<pair_t>> pawn_t::moves_no_constraints() const{
     
     //straight positions
     if (is_position_in_grid(index_pos[0], index_pos[1]+direction)){
-        possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]], numbers[index_pos[1]+direction]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]], numb[index_pos[1]+direction]));
     }
     if (init_move&&is_position_in_grid(index_pos[0],index_pos[1]+2*direction)){
-        possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]], numbers[index_pos[1]+2*direction]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]], numb[index_pos[1]+2*direction]));
     }
 
     //diagonal positions
     if (is_position_in_grid(index_pos[0]+1, index_pos[1]+direction)){
-        possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]+1], numbers[index_pos[1]+direction]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]+1], numb[index_pos[1]+direction]));
     }
     if (is_position_in_grid(index_pos[0]-1, index_pos[1]+direction)){
-        possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]-1], numbers[index_pos[1]+direction]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]-1], numb[index_pos[1]+direction]));
     }
     return possible_pos;
 };
@@ -341,28 +344,28 @@ std::vector<std::shared_ptr<pair_t>> horse_t::moves_no_constraints() const{
     int id_x = index_pos[0];
     int id_y = index_pos[1];
     if (is_position_in_grid(id_x+2, id_y+1)) {
-        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x+2], numbers[id_y+1]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[id_x+2], numb[id_y+1]));
     }
     if (is_position_in_grid(id_x+2, id_y-1)) {
-        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x+2], numbers[id_y-1]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[id_x+2], numb[id_y-1]));
     }
     if (is_position_in_grid(id_x-2, id_y+1)) {
-        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x-2], numbers[id_y+1]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[id_x-2], numb[id_y+1]));
     }
     if (is_position_in_grid(id_x-2, id_y-1)) {
-        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x-2], numbers[id_y-1]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[id_x-2], numb[id_y-1]));
     }
     if (is_position_in_grid(id_x+1, id_y+2)) {
-        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x+1], numbers[id_y+2]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[id_x+1], numb[id_y+2]));
     }
     if (is_position_in_grid(id_x-1, id_y+2)) {
-        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x-1], numbers[id_y+2]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[id_x-1], numb[id_y+2]));
     }
     if (is_position_in_grid(id_x+1, id_y-2)) {
-        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x+1], numbers[id_y-2]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[id_x+1], numb[id_y-2]));
     }
     if (is_position_in_grid(id_x-1, id_y-2)) {
-        possible_pos.push_back(std::make_shared<pair_t>(letters[id_x-1], numbers[id_y-2]));
+        possible_pos.push_back(std::make_shared<pair_t>(lett[id_x-1], numb[id_y-2]));
     }
     return possible_pos;
 
@@ -377,7 +380,7 @@ std::vector<std::shared_ptr<pair_t>> bishop_t::moves_no_constraints() const{
 	// toward top right
 	for (int n = 1; n < 8; n++) {
 		if (is_position_in_grid(index_pos[0]+n, index_pos[1]+n)){
-		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]+n], numbers[index_pos[1]+n]));
+		    possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]+n], numb[index_pos[1]+n]));
 		}
 		else {
 			break;
@@ -387,7 +390,7 @@ std::vector<std::shared_ptr<pair_t>> bishop_t::moves_no_constraints() const{
     // toward top left
 	for (int n = 1; n < 8; n++) {
 		if (is_position_in_grid(index_pos[0]-n, index_pos[1]+n)){
-		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]-n], numbers[index_pos[1]+n]));
+		    possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]-n], numb[index_pos[1]+n]));
 		} else {
 			break;
 		}  
@@ -396,7 +399,7 @@ std::vector<std::shared_ptr<pair_t>> bishop_t::moves_no_constraints() const{
 	// toward bottom right
 	for (int n = 1; n < 8; n++) {
 		if (is_position_in_grid(index_pos[0]+n, index_pos[1]-n)){
-		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]+n], numbers[index_pos[1]-n]));
+		    possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]+n], numb[index_pos[1]-n]));
 		} else {
 			break;
 		}
@@ -405,7 +408,7 @@ std::vector<std::shared_ptr<pair_t>> bishop_t::moves_no_constraints() const{
 	// toward bottom left
 	for (int n = 1; n < 8; n++) {
 		if (is_position_in_grid(index_pos[0]-n, index_pos[1]-n)){
-		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]-n], numbers[index_pos[1]-n]));
+		    possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]-n], numb[index_pos[1]-n]));
 		}
 		else {
 			break;
@@ -421,7 +424,7 @@ std::vector<std::shared_ptr<pair_t>> rook_t::moves_no_constraints() const{
     std::vector<std::shared_ptr<pair_t>> possible_pos;
 	for (int n = 1; n < 8; n++) {   // vert up
 		if (is_position_in_grid(index_pos[0], index_pos[1]+n)){
-		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]], numbers[index_pos[1]+n]));
+		    possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]], numb[index_pos[1]+n]));
 		}
 		else {
 			break;
@@ -429,7 +432,7 @@ std::vector<std::shared_ptr<pair_t>> rook_t::moves_no_constraints() const{
 	}	
 	for (int n = 1; n < 8; n++) {   // vert down
 		if (is_position_in_grid(index_pos[0], index_pos[1]-n)){
-		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]], numbers[index_pos[1]-n]));
+		    possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]], numb[index_pos[1]-n]));
 		}
 		else {
 			break;
@@ -437,7 +440,7 @@ std::vector<std::shared_ptr<pair_t>> rook_t::moves_no_constraints() const{
 	}
 	for (int n = 1; n < 8; n++) {	// hor right
 		if (is_position_in_grid(index_pos[0]+n, index_pos[1])){
-		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]+n], numbers[index_pos[1]]));
+		    possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]+n], numb[index_pos[1]]));
 		}
 		else {
 			break;
@@ -445,7 +448,7 @@ std::vector<std::shared_ptr<pair_t>> rook_t::moves_no_constraints() const{
 	}
 	for (int n = 1; n < 8; n++) {   // hor left
 		if (is_position_in_grid(index_pos[0]-n, index_pos[1])){
-		    possible_pos.push_back(std::make_shared<pair_t>(letters[index_pos[0]-n], numbers[index_pos[1]]));
+		    possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]-n], numb[index_pos[1]]));
 		}
 		else {
 			break;

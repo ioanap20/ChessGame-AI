@@ -105,8 +105,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<pie
 
 /*-----------------------------------------global variables----------------------------------------------------------*/
 
-std::vector<char> letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
-std::vector<int> numbers = {1,2,3,4,5,6,7,8};
+
 
 
 #endif
