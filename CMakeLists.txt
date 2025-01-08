@@ -10,6 +10,9 @@ add_library(lib_chess_and_the_city
   chess_board.cpp
   piece.cpp
   algo.cpp
+  castling.cpp
+  check.cpp
+  promotion.cpp
 )
 
 add_executable(chess_and_the_city
