@@ -103,11 +103,6 @@ std::ostream& operator<<(std::ostream& os, const pair_t& pair);
 std::ostream& operator<<(std::ostream& os, const piece_t& piece);
 std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<piece_t>>& pieces);
 
-/*-----------------------------------------global variables----------------------------------------------------------*/
-
-
-
-
 #endif
 
 
