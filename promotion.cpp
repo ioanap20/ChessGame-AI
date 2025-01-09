@@ -45,3 +45,10 @@ and then we delete the old pawn from the map
 //global variable to store the possible positions
 std::vector<char> letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 std::vector<int> numbers = {1,2,3,4,5,6,7,8}; 
+
+
+void promote_pawn (pair_t pos, const string& color_ai){
+
+    //
+
+}
