@@ -37,7 +37,11 @@ vector is_promotion_valid (piece_t piece, char* our_colour) { //"char*"" --> "st
 
 
     //if black, pawn needs to be on row 1
+<<<<<<< HEAD
     if (our_colour = "black" ) {
+=======
+    if (our_colour = black ) {
+>>>>>>> 99792b8138e550ef73ae259ddb43203bccc780ae
         if (*pos = {1, {1,8}}) { //*pos pointer for pos of pair_t ,,,, {1,8} refers to any column within 1-8.
             return true;
         }

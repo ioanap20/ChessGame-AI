@@ -5,7 +5,18 @@
 #include "chess_board.h"
 #include "piece.h"
 using namespace std;
-
+class chess_board {
+public:
+    map<pair_t, shared_ptr<piece_t>> board;
+    void remove_piece(const pair_t& position) {
+        if (board.find(position) != board.end()) {
+            board.erase(position);
+            cout << "Piece at position " << position.first << position.second << " removed." << endl;
+        } else {
+            cout << "No piece found at position " << position.first << position.second << "." << endl;
+        }
+    }
+};
 
 map<string, bool> is_castling(const chess_board& chess_board, const string& color_ai) {   
     
@@ -102,9 +113,23 @@ std::pair<pair_t, pair_t> castle(chess_board& board, const std::string& color_ai
         board.move(rook_from, rook_to);
     } 
 
-    // else if (side == "queenside") {
+    else if (side == "queenside") {
+        // Move the king from e1/e8 to c1/c8
+        pair_t king_to('c', row);
 
+        // Move the rook from a1/a8 to d1/d8
+        rook_from = pair_t('a', row);
+        pair_t rook_to('d', row);
 
+        // Update the board using your existing move function
+        board.move(king_from, king_to);
+        board.move(rook_from, rook_to);
+
+        // Example: Remove any piece that obstructs the castling path, if needed
+        pair_t blocking_pos('b', row); // Adjust this position as needed
+        board.remove_piece(blocking_pos);
+    }
 
     return {king_from, rook_from};
 }
+
