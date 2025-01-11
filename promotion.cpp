@@ -7,44 +7,13 @@
 using namespace std;
 
 
-/* 
----------------- METHOD --------------------
-
-
-1......function that generates a list of valid promotable pawns:
-
-
-instead of checking single possible piece individually to see if it a pawn and it is on the promotion line
-
-search through the map to find all pawns on the promotion line
-
-return as a list of valid pieces
-
-at most we will only ever have one pawn that can be promoted, so list will almost always be just one pawn
-
-
-
-
-
-2......function to carry out the promotion?
-
-
-when we obtain this list with a valid pawn, we add a new promoted piece to the map (default:queen, but we can code for other pieces later),
-with the same position as the pawn vector <shared_ptr<piece_t>>
-
-and then we delete the old pawn from the map
-
-
-
----------------------------------------------
-*/
-
-
 
 //copied from piece.cpp, agatha will move this to piece.h later but for now use it here for promotion.cpp
 //global variable to store the possible positions
 std::vector<char> letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 std::vector<int> numbers = {1,2,3,4,5,6,7,8}; 
+
+
 
 
 shared_ptr<piece_t> get_piece (chess_board board, const pair_t position) {
@@ -58,7 +27,7 @@ shared_ptr<piece_t> get_piece (chess_board board, const pair_t position) {
 
 
 
-shared_ptr<piece_t> can_we_promote (chess_board board, std::string& my_color){
+shared_ptr<piece_t> can_we_promote (chess_board board, string& my_color){
 
     vector <shared_ptr<piece_t>> promotion_line; 
     int row;
@@ -83,6 +52,47 @@ shared_ptr<piece_t> can_we_promote (chess_board board, std::string& my_color){
 
     return nullptr;
 
+}
+
+
+void do_promotion (chess_board board, shared_ptr<piece_t> pawn, const string promote_to, string& my_color) {
+    shared_ptr<piece_t> new_piece;
+    if (promote_to == "queen") {
+        new_piece = make_shared<queen_t> (pawn->pos, pawn->color); //created a new queen
+    }
+    if (promote_to == "rook") {
+        new_piece = make_shared<rook_t> (pawn->pos, pawn->color); //created a new rook
+    }
+    if (promote_to == "bishop") {
+        new_piece = make_shared<bishop_t> (pawn->pos, pawn->color); //created a new bishop
+    }
+    if (promote_to == "horse") {
+        new_piece = make_shared<horse_t> (pawn->pos, pawn->color); //created a new knight
+    }
+
+
+    //add new (promoted) piece to board
+    board.board[*(pawn->pos)] = new_piece;
+
+
+
+    //add new_piece to the list of current colour pieces
+    auto pieces_list = (my_color == "white") ? board.whitePieces : board.blackPieces; //equivalent to an if statement
+ 
+    auto it = find(pieces_list.begin(), pieces_list.end (), pawn);
+
+    if (it != pieces_list.end()) {
+        *it = new_piece;
+    }
+
+
+
+    //add new_piece to the list of allPieces
+    auto it_all = find(board.allPieces.begin(), board.allPieces.end (), pawn);
+
+    if (it_all != board.allPieces.end()) {
+        *it_all = new_piece;
+    }
 
 
 }
