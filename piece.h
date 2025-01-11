@@ -99,6 +99,7 @@ struct pawn_t : piece_t{
 
 /*------------------------------------OS OPERATOR OVERLOADING------------------------------------------------------*/
 
+
 std::ostream& operator<<(std::ostream& os, const pair_t& pair);
 std::ostream& operator<<(std::ostream& os, const piece_t& piece);
 std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<piece_t>>& pieces);

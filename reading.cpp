@@ -11,6 +11,8 @@ using namespace std;
 // Function to read all lines from the file
 vector<string> reading::readAllLines(int argc, char *argv[])
 {
+
+
     
     if (argc < 3) {
         std::cerr << "Error: Not enough arguments provided." << std::endl;
@@ -20,6 +22,7 @@ vector<string> reading::readAllLines(int argc, char *argv[])
     // Should we check if the number of arguments is correct?
     string historyFile = argv[2];
    // string outputFile = argv[4];
+
 
     ifstream infile(historyFile);
     //ofstream fout(outputFile);
@@ -59,6 +62,7 @@ void reading::update_board(chess_board& board)
     // update the boardMap with the moves
     /*pair_t initial, final;
     initial.x = move[0]
+
     boardMap.move(initial, final);*/
 
     
@@ -68,6 +72,7 @@ void reading::update_board(chess_board& board)
 
         pair_t from(move[0], move[1] - '0'); // Convert char to int
         pair_t to(move[2], move[3] - '0');
+
 
 
         board.move(from, to);

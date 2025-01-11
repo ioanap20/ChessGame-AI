@@ -1,0 +1,32 @@
+>>week comm. Dec 2
+working on implementing an update_board function with Ioana in reading.cpp
+finished my code and pushed to Ioana for her to check and modify
+
+
+>>week comm. Dec 9
+designated to code promotion for the chess engine (solo working)
+asking for help on how to pull contents of main branch into my personal branch with TA
+coding is_promotion_valid() function
+
+
+>>week comm. Dec 16
+coding is_promotion_valid() function
+working on code structure for do_promotion() function
+chat with agatha who advised to use maps to make code more efficient
+agatha walks me through logic of the code using maps
+also talking through checking to see if enemy team has carried out a promotion in the reading file
+
+
+>>week comm. Dec 30
+researching how maps work in c++
+rethinking the code structure for promotion using maps instead
+writing down method via comments to refer to next time
+
+
+>>week comm. Jan 6
+working out how to merge my promotion files to the main branch
+manually uploading my promotion files to main after renaming existing file names to make it clearer
+struggling with starting the code because I didn't understand the syntax and variable names already used by others in other files.
+deciphered other files such as chessboard.h/.cpp ; piece.cpp and castling.cpp to learn from other's code and code structure
+helped Carla who helped me code the reading promotion in the reading.cpp file during the TD 09/01/25
+studied previous lecture slides and asked chatgpt to help explain certain concepts to be ready to recode promotion.
