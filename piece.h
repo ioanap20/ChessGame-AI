@@ -2,9 +2,13 @@
 #include <vector>
 #include <memory>
 #include <map>
+#include <string>
+using namespace std;
 
 #ifndef __PIECES__
 #define __PIECES__
+
+struct chess_board;
 
 struct pair_t{
     // We model the position (x,y) on the board as x: letter and y: number
@@ -35,10 +39,9 @@ struct piece_t{
         : pos(pos), color(color), id(id), is_moved(false) {};
     
     //possible moves
-    std::vector<std::shared_ptr<pair_t>> moves(std::map<pair_t, std::shared_ptr<piece_t>> board );
+    std::vector<std::shared_ptr<pair_t>> moves(chess_board& board);
     //only takes into account board limitations
-    virtual std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const {return {};}
-
+    virtual std::vector<std::shared_ptr<pair_t>> moves_no_constraints(chess_board& board) const {return {};}
     virtual ~piece_t() = default; 
 
     bool operator<(const piece_t& other) const {
@@ -63,37 +66,37 @@ struct piece_t{
 struct king_t : piece_t{
     king_t(std::shared_ptr<pair_t> pos, std::string color) 
         : piece_t(pos, color, "king", false) {};
-    std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
+    std::vector<std::shared_ptr<pair_t>> moves_no_constraints(chess_board& board) const;
 };
 
 struct rook_t : piece_t{
     rook_t(std::shared_ptr<pair_t> pos, std::string color) 
         : piece_t(pos, color, "rook", false) {};
-    std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
+    std::vector<std::shared_ptr<pair_t>> moves_no_constraints(chess_board& board) const;
 };
 
 struct bishop_t : piece_t{
     bishop_t(std::shared_ptr<pair_t> pos, std::string color) 
         : piece_t(pos, color, "bishop", false) {};
-    std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
+    std::vector<std::shared_ptr<pair_t>> moves_no_constraints(chess_board& board) const;
 };
 
 struct horse_t : piece_t{
     horse_t(std::shared_ptr<pair_t> pos, std::string color) 
         : piece_t(pos, color, "horse", false) {};
-    std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
+    std::vector<std::shared_ptr<pair_t>> moves_no_constraints(chess_board& board) const;
 };
 
 struct queen_t : piece_t{
     queen_t(std::shared_ptr<pair_t> pos, std::string color) 
         : piece_t(pos, color, "queen", false) {};
-    std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
+    std::vector<std::shared_ptr<pair_t>> moves_no_constraints(chess_board& board) const;
 };
 
 struct pawn_t : piece_t{
     pawn_t(std::shared_ptr<pair_t> pos, std::string color) 
         : piece_t(pos, color, "pawn", false) {};
-    std::vector<std::shared_ptr<pair_t>> moves_no_constraints() const;
+    std::vector<std::shared_ptr<pair_t>> moves_no_constraints(chess_board& board) const;
 };
 
 
@@ -102,6 +105,13 @@ struct pawn_t : piece_t{
 std::ostream& operator<<(std::ostream& os, const pair_t& pair);
 std::ostream& operator<<(std::ostream& os, const piece_t& piece);
 std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<piece_t>>& pieces);
+
+/*-----------------------------------------global variables----------------------------------------------------------*/
+
+
+extern std::map<std::string, std::vector<std::shared_ptr<pair_t>>> can_castle(chess_board chess_board, const std::string& color);
+extern vector<shared_ptr<piece_t>> is_check(chess_board chess_board);
+
 
 #endif
 

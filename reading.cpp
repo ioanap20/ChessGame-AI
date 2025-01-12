@@ -17,12 +17,9 @@ vector<string> reading::readAllLines(int argc, char *argv[])
         return {}; // Return an empty vector
     }
     
-    // Should we check if the number of arguments is correct?
     string historyFile = argv[2];
-   // string outputFile = argv[4];
 
     ifstream infile(historyFile);
-    //ofstream fout(outputFile);
 
      if (!infile.is_open()) {
         std::cerr << "Error: Unable to open input file: " << historyFile << std::endl;

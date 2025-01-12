@@ -17,14 +17,14 @@ int main(int argc, char* argv[]) {
     board.display_chess_board();
 
     reading read(argc, argv, board);
-
+   
     board.set_pieces(read.color_ai);
 
     cout << "After reading:" << endl;
-    
+        
     board.display_chess_board();
 
-    auto next_move = board.next_move(read.color_ai);
+    auto next_move = board.next_move(board.color_ai);
     
     board.move(*next_move[0], *next_move[1]);
     

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "piece.h"
+#include "chess_board.h"
 #include <map>
 #include <algorithm>
 
@@ -25,11 +26,11 @@ bool is_position_in_grid(int index_x, int index_y){
 }
 
 //given a vector containing positions, and a board containing (position, piece) and a piece itself, outputs a vector containing only positions where no friendly piece is
-std::vector<std::shared_ptr<pair_t>> remove_friendly_pos(piece_t cur, std::vector<std::shared_ptr<pair_t>>& positions, std::map<pair_t, std::shared_ptr<piece_t>> board){
+std::vector<std::shared_ptr<pair_t>> remove_friendly_pos(piece_t cur, std::vector<std::shared_ptr<pair_t>>& positions, const chess_board& board){
     std::vector<std::shared_ptr<pair_t>> ok_pos;
     for (auto& pos : positions){
-        auto it = board.find(*pos);  // we extract an iterator to the (key,value) pair of map and check if the key we are looking for is inside map
-        if (it!=board.end()){  // if the key is indeed inside the map we check the color of the pieces and add if its a different color
+        auto it = board.board.find(*pos);  // we extract an iterator to the (key,value) pair of map and check if the key we are looking for is inside map
+        if (it!=board.board.end()){  // if the key is indeed inside the map we check the color of the pieces and add if its a different color
             if (it->second->color != cur.color){
                 ok_pos.push_back(pos);
             }
@@ -45,7 +46,7 @@ std::vector<std::shared_ptr<pair_t>> remove_friendly_pos(piece_t cur, std::vecto
 /*--------------------------------------------------------------------------------------------------------*/
 
 //pawn
-std::vector<std::shared_ptr<pair_t>> pawn_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::map<pair_t, std::shared_ptr<piece_t>> board){
+std::vector<std::shared_ptr<pair_t>> pawn_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, const chess_board& board){
     std::vector<std::shared_ptr<pair_t>> vertical_pos;
     std::vector<std::shared_ptr<pair_t>> diag_pos;
     for (auto& pos : pos_positions){
@@ -57,8 +58,8 @@ std::vector<std::shared_ptr<pair_t>> pawn_moves(piece_t& cur, std::vector<std::s
     bool cond = true; // cond is a boolean to indicate if we continue the loop or not (if we have encountered a piece)
     for (auto& pos : vertical_pos){
         if (!cond){ break;}
-        auto it = board.find(*pos);
-        if (it!=board.end()){
+        auto it = board.board.find(*pos);
+        if (it!=board.board.end()){
             cond = false;
         }
         if (cond){
@@ -68,8 +69,8 @@ std::vector<std::shared_ptr<pair_t>> pawn_moves(piece_t& cur, std::vector<std::s
 
     //sifting diagonal positions -- only can go where opponent piece
     for (auto& pos: diag_pos){
-        auto it = board.find(*pos);
-        if (it!=board.end()){
+        auto it = board.board.find(*pos);
+        if (it!=board.board.end()){
             if (it->second->color != cur.color){
                 ok_positions.push_back(pos);
             }
@@ -79,7 +80,7 @@ std::vector<std::shared_ptr<pair_t>> pawn_moves(piece_t& cur, std::vector<std::s
 }
 
 //rook
-std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::map<pair_t, std::shared_ptr<piece_t>> board){
+std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, const chess_board& board){
     std::vector<std::shared_ptr<pair_t>> vert_pos;
     std::vector<std::shared_ptr<pair_t>> hor_pos;
     for (auto& pos : pos_positions){ ((*pos).x == (*(cur.pos)).x ? vert_pos : hor_pos).push_back(pos);}
@@ -108,8 +109,8 @@ std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::s
     bool cond = true;
     for (auto& pos : vert_pos_above){
         if (!cond){ break;}
-        auto it = board.find(*pos);
-        if (it!=board.end()){
+        auto it = board.board.find(*pos);
+        if (it!=board.board.end()){
             if (it->second->color != cur.color){
                 ok_positions.push_back(pos);
             }
@@ -122,8 +123,8 @@ std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::s
     cond = true;
     for (auto& pos : vert_pos_below){
         if (!cond){ break;}
-        auto it = board.find(*pos);
-        if (it!=board.end()){
+        auto it = board.board.find(*pos);
+        if (it!=board.board.end()){
             if (it->second->color != cur.color){
                 ok_positions.push_back(pos);
             }
@@ -136,8 +137,8 @@ std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::s
     cond = true;
     for (auto& pos : hor_pos_above){
         if (!cond){ break;}
-        auto it = board.find(*pos);
-        if (it!=board.end()){
+        auto it = board.board.find(*pos);
+        if (it!=board.board.end()){
             if (it->second->color != cur.color){
                 ok_positions.push_back(pos);
             }
@@ -150,8 +151,8 @@ std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::s
     cond = true;
     for (auto& pos : hor_pos_below){
         if (!cond){ break;}
-        auto it = board.find(*pos);
-        if (it!=board.end()){
+        auto it = board.board.find(*pos);
+        if (it!=board.board.end()){
             if (it->second->color != cur.color){
                 ok_positions.push_back(pos);
             }
@@ -165,7 +166,7 @@ std::vector<std::shared_ptr<pair_t>> rook_moves(piece_t& cur, std::vector<std::s
 }
 
 //bishop
-std::vector<std::shared_ptr<pair_t>> bishop_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::map<pair_t,std::shared_ptr<piece_t>> board){
+std::vector<std::shared_ptr<pair_t>> bishop_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, const chess_board& board){
     std::vector<std::shared_ptr<pair_t>> maindiag_pos; // /
     std::vector<std::shared_ptr<pair_t>> antidiag_pos; // // "\"
     for (auto& pos : pos_positions){ ((pos->x - pos->y)== ((*(cur.pos)).x - (*(cur.pos)).y) ? maindiag_pos : antidiag_pos).push_back(pos);}
@@ -192,8 +193,8 @@ std::vector<std::shared_ptr<pair_t>> bishop_moves(piece_t& cur, std::vector<std:
     bool cond = true;
     for (auto& pos : maindiag_above){
         if (!cond){ break;}
-        auto it = board.find(*pos);
-        if (it!=board.end()){
+        auto it = board.board.find(*pos);
+        if (it!=board.board.end()){
             if (it->second->color != cur.color){
                 ok_positions.push_back(pos);
             }
@@ -206,8 +207,8 @@ std::vector<std::shared_ptr<pair_t>> bishop_moves(piece_t& cur, std::vector<std:
     cond = true;
     for (auto& pos : maindiag_below){
         if (!cond){ break;}
-        auto it = board.find(*pos);
-        if (it!=board.end()){
+        auto it = board.board.find(*pos);
+        if (it!=board.board.end()){
             if (it->second->color != cur.color){
                 ok_positions.push_back(pos);
             }
@@ -220,8 +221,8 @@ std::vector<std::shared_ptr<pair_t>> bishop_moves(piece_t& cur, std::vector<std:
     cond = true;
     for (auto& pos : antidiag_above){
         if (!cond){ break;}
-        auto it = board.find(*pos);
-        if (it!=board.end()){
+        auto it = board.board.find(*pos);
+        if (it!=board.board.end()){
             if (it->second->color != cur.color){
                 ok_positions.push_back(pos);
             }
@@ -234,8 +235,8 @@ std::vector<std::shared_ptr<pair_t>> bishop_moves(piece_t& cur, std::vector<std:
     cond = true;
     for (auto& pos : antidiag_below){
         if (!cond){ break;}
-        auto it = board.find(*pos);
-        if (it!=board.end()){
+        auto it = board.board.find(*pos);
+        if (it!=board.board.end()){
             if (it->second->color != cur.color){
                 ok_positions.push_back(pos);
             }
@@ -249,7 +250,7 @@ std::vector<std::shared_ptr<pair_t>> bishop_moves(piece_t& cur, std::vector<std:
 }
 
 //queen moves
-std::vector<std::shared_ptr<pair_t>> queen_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, std::map<pair_t, std::shared_ptr<piece_t>> board){
+std::vector<std::shared_ptr<pair_t>> queen_moves(piece_t& cur, std::vector<std::shared_ptr<pair_t>> pos_positions, const chess_board& board){
     std::vector<std::shared_ptr<pair_t>> vert_hor_pos;
     std::vector<std::shared_ptr<pair_t>> diag_pos;
     for (auto& pos : pos_positions){(((pos->x==(*(cur.pos)).x)||(pos->y==(*(cur.pos)).y)) ? vert_hor_pos : diag_pos).push_back(pos);}
@@ -261,8 +262,9 @@ std::vector<std::shared_ptr<pair_t>> queen_moves(piece_t& cur, std::vector<std::
 
 
 //global = works for knight and king on its own otherwise it calls the other functions
-std::vector<std::shared_ptr<pair_t>> piece_t::moves(std::map<pair_t, std::shared_ptr<piece_t>> board){
-    auto neighbors = moves_no_constraints();
+std::vector<std::shared_ptr<pair_t>> piece_t::moves(chess_board& board){
+        
+    auto neighbors = moves_no_constraints(board);
     if (id=="pawn"){
         return pawn_moves(*this, neighbors, board);
     }
@@ -281,7 +283,7 @@ std::vector<std::shared_ptr<pair_t>> piece_t::moves(std::map<pair_t, std::shared
 
 /*------------------------------------//MOVES NO CONSTRAINSTS//-----------------------------------------*/
 /*---------------------------------------KING-----------------------------------------------------------*/
-std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints() const{
+std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints(chess_board& board) const {
     pair_t actual_pos = *pos; 
     std::vector<int> index_pos = find_pos_indexes(actual_pos);
     std::vector<std::shared_ptr<pair_t>> possible_pos;
@@ -297,11 +299,25 @@ std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints() const{
     if (is_position_in_grid(index_pos[0], index_pos[1]-1)){
         possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]], numb[index_pos[1]-1]));
     }
+    
+
+    chess_board temp_board;
+    temp_board = board;
+
+    auto castling_info = can_castle(temp_board, this->color);
+
+    if (!castling_info["kingside"].empty()) {
+        possible_pos.push_back(castling_info["kingside"][0]);
+    }
+    if (!castling_info["queenside"].empty()) {
+        possible_pos.push_back(castling_info["queenside"][0]);
+    }
+    
     return possible_pos;
 };
 
 /*------------------------------------------PAWN---------------------------------------------------------*/
-std::vector<std::shared_ptr<pair_t>> pawn_t::moves_no_constraints() const{
+std::vector<std::shared_ptr<pair_t>> pawn_t::moves_no_constraints(chess_board& board) const{
     pair_t actual_pos = *pos;
     
     // if pawn is black or white we say if it goes to towards the bottom or up + if pawn has not moved yet it can go two steps at once
@@ -337,7 +353,7 @@ std::vector<std::shared_ptr<pair_t>> pawn_t::moves_no_constraints() const{
 };
 
 /*--------------------------------------------KNIGHT-------------------------------------------------------*/
-std::vector<std::shared_ptr<pair_t>> horse_t::moves_no_constraints() const{
+std::vector<std::shared_ptr<pair_t>> horse_t::moves_no_constraints(chess_board& board) const{
     pair_t actual_pos = *pos;
     std::vector<int> index_pos = find_pos_indexes(actual_pos);
     std::vector<std::shared_ptr<pair_t>> possible_pos;
@@ -372,7 +388,7 @@ std::vector<std::shared_ptr<pair_t>> horse_t::moves_no_constraints() const{
 }
 
 /*-----------------------------------------------BISHOP---------------------------------------------------*/
-std::vector<std::shared_ptr<pair_t>> bishop_t::moves_no_constraints() const{
+std::vector<std::shared_ptr<pair_t>> bishop_t::moves_no_constraints(chess_board& board) const{
     pair_t actual_pos = *pos; 
     std::vector<int> index_pos = find_pos_indexes(actual_pos);
     std::vector<std::shared_ptr<pair_t>> possible_pos;
@@ -418,7 +434,7 @@ std::vector<std::shared_ptr<pair_t>> bishop_t::moves_no_constraints() const{
 };
 
 /*-----------------------------------------------ROOK-----------------------------------------------------*/
-std::vector<std::shared_ptr<pair_t>> rook_t::moves_no_constraints() const{
+std::vector<std::shared_ptr<pair_t>> rook_t::moves_no_constraints(chess_board& board) const{
     pair_t actual_pos = *pos; 
     std::vector<int> index_pos = find_pos_indexes(actual_pos);
     std::vector<std::shared_ptr<pair_t>> possible_pos;
@@ -458,16 +474,16 @@ std::vector<std::shared_ptr<pair_t>> rook_t::moves_no_constraints() const{
 };
 
 /*-----------------------------------------------QUEEN----------------------------------------------------*/
-std::vector<std::shared_ptr<pair_t>> queen_t::moves_no_constraints() const{
+std::vector<std::shared_ptr<pair_t>> queen_t::moves_no_constraints(chess_board& board) const{
     pair_t actual_pos = *pos; 
     std::vector<int> index_pos = find_pos_indexes(actual_pos);
     std::vector<std::shared_ptr<pair_t>> possible_pos;
 	
     bishop_t bishop(std::make_shared<pair_t>(actual_pos.x, actual_pos.y), color);
-    std::vector<std::shared_ptr<pair_t>> bishop_pos = bishop.moves_no_constraints();
+    std::vector<std::shared_ptr<pair_t>> bishop_pos = bishop.moves_no_constraints(board);
     
     rook_t rook(std::make_shared<pair_t>(actual_pos.x, actual_pos.y), color);
-    std::vector<std::shared_ptr<pair_t>> rook_pos = rook.moves_no_constraints();
+    std::vector<std::shared_ptr<pair_t>> rook_pos = rook.moves_no_constraints(board);
 
     possible_pos.insert(possible_pos.end(), bishop_pos.begin(), bishop_pos.end());	
 	possible_pos.insert(possible_pos.end(), rook_pos.begin(), rook_pos.end());
@@ -502,6 +518,36 @@ std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<pie
 }
 
 
+//(-------------    CASTLING MOVES   -----------------)
+
+/*std::vector<std::shared_ptr<pair_t>>piece_t:: castle_moves(chess_board& board, const std::string& color_ai) {
+    std::vector<std::shared_ptr<pair_t>> possible_castling_moves;
+
+    // Use the is_castling function to determine castling availability
+    auto castling_status = is_castling(board, color_ai);
+
+    // If castling is not possible, return an empty vector
+    if (!castling_status["kingside"] && !castling_status["queenside"]) {
+        return possible_castling_moves;
+    }
+
+    // Use castle_moves to get the actual moves
+    if (castling_status["kingside"]) {
+        auto kingside_moves = castling(board, color_ai, "kingside", true);
+        if (!kingside_moves.empty()) {
+            possible_castling_moves.push_back(kingside_moves[1]); // Add the king's move (e.g., e1 -> g1)
+        }
+    }
+
+    if (castling_status["queenside"]) {
+        auto queenside_moves = castling(board, color_ai, "queenside", true);
+        if (!queenside_moves.empty()) {
+            possible_castling_moves.push_back(queenside_moves[1]); // Add the king's move (e.g., e1 -> c1)
+        }
+    }
+
+    return possible_castling_moves;
+}
 
 /*--------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------LOCAL TESTING-----------------------------------------------*/
