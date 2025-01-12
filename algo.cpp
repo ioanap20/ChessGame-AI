@@ -1,5 +1,6 @@
 #include "chess_board.h"
-
+#include <iostream>
+#include <limits>
 using namespace std;
 
 vector<shared_ptr<pair_t>> chess_board::next_move(std::string color){
@@ -13,7 +14,7 @@ vector<shared_ptr<pair_t>> chess_board::next_move(std::string color){
     map<piece_t, vector<shared_ptr<pair_t>>> piece_to_move;
     for (auto& piece : my_pieces){
         //piece_to_move[*piece] = (*piece).moves(allPieces);
-        piece_to_move[*piece] = (*piece).moves(board);
+        piece_to_move[*piece] = (*piece).moves(*this);
         for (auto& move : piece_to_move[*piece]){
             if (board.find(*move)!=board.end()){
                 if ((*piece).color != (*board[(*move)]).color){
@@ -48,3 +49,43 @@ vector<shared_ptr<pair_t>> chess_board::next_move(std::string color){
     result.push_back(rand_moves_vec[rand_move_index]);
     return result;
 }
+    // Build piece_to_move for all pieces
+
+    /*string position_from, position_to;
+    cout << "Enter the position of the piece (e.g., 'e2'): ";
+    cin >> position_from;
+
+    pair_t from(position_from[0], position_from[1] - '0');
+
+    auto it = board.find(from);
+    
+    auto piece = it->second;
+
+    auto moves = piece->moves(*this);
+
+    if (moves.empty()) {
+        cout << "No valid moves available for the piece at " << from.x << from.y << "." << endl;
+        return {};
+    }
+
+    cout << "Valid moves for " << piece->id << " at " << from.x << from.y << ":" << endl;
+    for (size_t i = 0; i < moves.size(); ++i) {
+        cout << i << ": " << moves[i]->x << moves[i]->y << endl;
+    }
+
+    cin >> position_to;
+    pair_t to(position_to[0], position_to[1] - '0');
+    vector<shared_ptr<pair_t>> result;
+    result.push_back(make_shared<pair_t>(from));
+    result.push_back(make_shared<pair_t>(to));
+
+    if (piece->id == "king" && abs(to.x - from.x) == 2){
+        if (to.x == 'g'){
+            move(pair_t('h', from.y), pair_t('f', from.y));
+        } else {
+            move(pair_t('a', from.y), pair_t('d', from.y));
+        }
+    }
+
+    return result;
+}*/

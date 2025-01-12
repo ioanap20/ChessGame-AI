@@ -27,7 +27,4 @@ struct chess_board{
     chess_board(); 
 };
 
-extern map<string, bool> is_castling(const chess_board& board, const string& color);
-extern void castle(chess_board& board, const string& color, const string& side, bool simulate); // returns the kings move
-
 #endif

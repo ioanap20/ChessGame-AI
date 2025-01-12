@@ -28,6 +28,8 @@ using namespace std;
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 piece_t get_king(string color, chess_board chessboard){   // This function gets the piece of the king of a given color
+            
+    
     auto it = find_if((chessboard.allPieces).begin(), (chessboard.allPieces).end(), [color](const shared_ptr<piece_t>& piece){
                     return (*piece).id == "king" && (*piece).color==color;
                 });
@@ -35,25 +37,34 @@ piece_t get_king(string color, chess_board chessboard){   // This function gets 
 }
 
 vector<shared_ptr<piece_t>> is_check(chess_board chessboard){  // This function checks if our king is in a check position, that is, it computes a vector of all pieces that are threatening the king and returns them, if the vector is empty (check using vector.empty() which gives true if it is and false otherwise), then the king is not in a check position
-    vector<shared_ptr<piece_t>> endangering_pieces;
+    vector<shared_ptr<piece_t>> endangering_pieces = {};
     auto color = chessboard.color_ai;
-    cout<<"Color : "<<color<<endl;
-    cout<<"Getting the king"<<endl;
+    //cout<<"Color : "<<color<<endl;
+    //cout<<"Getting the king"<<endl;
     auto king = get_king(color, chessboard);
-    cout<<"Got king "<< king<<endl;
-    cout<<"Getting king position"<<endl;
+    //cout<<"Got king "<< king<<endl;
+    //cout<<"Getting king position"<<endl;
     pair_t king_pos = *(king.pos);
 
+
     for (auto& piece : chessboard.enemy_pieces){
-        auto moves = (*piece).moves(chessboard.board);
-        auto it = find_if(moves.begin(), moves.end(), [king_pos](const shared_ptr<pair_t>& pos){
+        if (piece->id=="king"){
+            continue;
+        }
+        auto moves = (*piece).moves(chessboard);
+
+        //cout << "Moves computed for " << *piece << endl;
+
+        auto it = find_if(moves.begin(), moves.end(), [king_pos](const shared_ptr<pair_t>& pos){    
             return (*pos)==king_pos;
         });
+
         if (it!=moves.end()){
-            cout<<"Found a piece"<<endl;
+            //cout<<"Found a piece"<<endl;
             endangering_pieces.push_back(piece);
         }
     }
+
 
     return endangering_pieces;
 }
@@ -163,7 +174,7 @@ vector<shared_ptr<pair_t>> get_path_to_king(piece_t king, piece_t opp_piece){
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 
-int main(int argc, char* argv[]){
+/*int main(int argc, char* argv[]){
     //king_t king(std::make_shared<pair_t>('f', 2), "white");
     //vector<shared_ptr<piece_t>> pieces;
     chess_board chessboard;
@@ -208,4 +219,4 @@ int main(int argc, char* argv[]){
     }
 
     return 0;
-} 
+} */
