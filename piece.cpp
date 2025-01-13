@@ -329,7 +329,15 @@ std::vector<std::shared_ptr<pair_t>> pawn_t::moves_no_constraints(chess_board& b
     } else {
         direction = -1;
         init_move = (actual_pos.y==7);
+    }   
+    
+    shared_ptr<piece_t> piece_to_promote = can_we_promote(board, board.color_ai);
+
+     if(piece_to_promote){
+        cout << "Promote your pawn to a queen, rook, or bishop" << endl;
+        do_promotion(board, piece_to_promote, "queen", board.color_ai);
     }
+
 
     std::vector<int> index_pos = find_pos_indexes(actual_pos);
     std::vector<std::shared_ptr<pair_t>> possible_pos;
@@ -350,6 +358,8 @@ std::vector<std::shared_ptr<pair_t>> pawn_t::moves_no_constraints(chess_board& b
         possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]-1], numb[index_pos[1]+direction]));
     }
     return possible_pos;
+
+    
 };
 
 /*--------------------------------------------KNIGHT-------------------------------------------------------*/
@@ -359,6 +369,7 @@ std::vector<std::shared_ptr<pair_t>> horse_t::moves_no_constraints(chess_board& 
     std::vector<std::shared_ptr<pair_t>> possible_pos;
     int id_x = index_pos[0];
     int id_y = index_pos[1];
+    
     if (is_position_in_grid(id_x+2, id_y+1)) {
         possible_pos.push_back(std::make_shared<pair_t>(lett[id_x+2], numb[id_y+1]));
     }

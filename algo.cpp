@@ -64,8 +64,14 @@ vector<shared_ptr<pair_t>> chess_board::next_move(std::string color){
     auto moves = piece->moves(*this);
 
     if (moves.empty()) {
+
+        if(can_we_promote(*this, color)){
+            cout << "Promote your pawn to a queen, rook, bishop, or knight." << endl;
+        }
+        else {
         cout << "No valid moves available for the piece at " << from.x << from.y << "." << endl;
         return {};
+    }
     }
 
     cout << "Valid moves for " << piece->id << " at " << from.x << from.y << ":" << endl;

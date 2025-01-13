@@ -55,7 +55,7 @@ shared_ptr<piece_t> can_we_promote (chess_board board, string& my_color){
 }
 
 
-void do_promotion (chess_board board, shared_ptr<piece_t> pawn, const string promote_to, string& my_color) {
+void do_promotion (chess_board board, shared_ptr<piece_t> pawn, const string promote_to, string my_color) {
     shared_ptr<piece_t> new_piece;
     if (promote_to == "queen") {
         new_piece = make_shared<queen_t> (pawn->pos, pawn->color); //created a new queen
@@ -72,7 +72,13 @@ void do_promotion (chess_board board, shared_ptr<piece_t> pawn, const string pro
 
 
     //add new (promoted) piece to board
+
+    
+
+    board.board.erase(*(pawn->pos));
     board.board[*(pawn->pos)] = new_piece;
+    
+
 
 
 

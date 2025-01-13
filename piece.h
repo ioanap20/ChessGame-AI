@@ -111,7 +111,8 @@ std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<pie
 
 extern std::map<std::string, std::vector<std::shared_ptr<pair_t>>> can_castle(chess_board chess_board, const std::string& color);
 extern vector<shared_ptr<piece_t>> is_check(chess_board chess_board);
-
+extern shared_ptr<piece_t> can_we_promote (chess_board board, string& my_color);
+extern void do_promotion (chess_board board, shared_ptr<piece_t> pawn, const string promote_to, string my_color);
 
 #endif
 
