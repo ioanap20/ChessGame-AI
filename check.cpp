@@ -4,6 +4,7 @@
 #include "chess_board.h"
 #include <iostream>
 #include <algorithm>
+#include <unordered_set>
 
 std::vector<char> let = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 std::vector<int> num = {1,2,3,4,5,6,7,8};
@@ -167,14 +168,131 @@ vector<shared_ptr<pair_t>> get_path_to_king(piece_t king, piece_t opp_piece){
 /*------------------------------------------------------------POSSIBLE MOVES IF CHECK--------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
+// creating a custom hash function to be able to use std::unordered_set since it needs it to directly access elements in the vectors
 
+namespace std {  // we put the namespace to override the standard hashing
+    template<> // 
+    struct hash<pair_t>{ // these two lines create a specialization for the hash function to pair_t types
+        size_t operator()(const pair_t& p) const {  // define teh function call to the operator
+            return hash<char>()(p.x) ^ hash<int>()(p.y);  // precise we use the hash of characters to hash the first entry and then integer hashing (both are standard) to hash the second entry. Then the "^" corresponds to an XOR which permits to seperate the binary conversion of both hasing to avoid having equal hashing if x and y and reversed
+        } 
+    };
+};
+
+vector<shared_ptr<pair_t>> intersection(vector<shared_ptr<pair_t>>& vec1, vector<shared_ptr<pair_t>>& vec2){
+    unordered_set<pair_t> set1;
+    for (const auto& elem : vec1){
+        set1.insert(*elem);
+    }
+
+    vector<shared_ptr<pair_t>> intersection;
+    for (const auto& elem : vec2){
+        if (set1.count(*elem)){
+            intersection.push_back(elem);
+        }
+    }
+
+    return intersection;
+}
+
+
+vector<shared_ptr<pair_t>> check_moves(shared_ptr<piece_t> piece, chess_board chessboard){
+    cout<<"This is the piece we are looking at : "<< *piece << endl;
+    //PART 1 : getting the paths of all the pieces that are endangering our king
+    auto endangering_pieces = is_check(chessboard);
+    auto king = get_king(chessboard.color_ai, chessboard);
+
+    vector<shared_ptr<pair_t>> paths;
+    vector<shared_ptr<pair_t>> vec;
+    for(auto& opp : endangering_pieces){
+        vec = get_path_to_king(king, *opp);
+        paths.insert(paths.end(), vec.begin(), vec.end());
+    }
+    cout<<"Paths : "<<endl;
+    for(auto& p : paths){
+        cout<< *p <<" ";
+    }
+    cout<<endl;
+
+    //PART 2 : get the intersection between me pieces' possibe moves and the ones in the path 
+    chessboard.display_chess_board();
+    auto my_moves = piece->moves(chessboard);
+    cout<< "These are my possible moves : ";
+    for (auto& mo : piece->moves(chessboard)){
+        cout<< *mo<<" ";
+    }
+    cout<<endl;
+
+    vector<shared_ptr<pair_t>> correct_moves; // store pieces that get us out of check position
+    auto intersect = intersection(my_moves, paths);
+    cout<<"These are the intersection points : ";
+    for (auto& points : intersect){
+        cout<<*points;
+    }
+    cout<<endl;
+
+    pair_t tmp = *(piece->pos);  // keep in memory the initial position to be able to move the piece back
+    cout<<"The piece we are looking at is at position "<< tmp<<endl;
+    for(auto& posi : intersect){
+        cout<<"We are at position "<< *posi<<endl;
+        if ((chessboard.board).find(*posi) != (chessboard.board).end()){ // This will correspond to eating the piece endangering our king
+            cout<<"The position we are looking at contains the enemy piece"<< endl;
+            //first keep the piece in memory, then delete it 
+            auto tmp_piece_ptr = chessboard.board[*posi]; //stores the pointer to the piece so that it isn't erased when the other pointers to it are erased
+            (chessboard.board).erase(*((*tmp_piece_ptr).pos)); // erase from board
+            auto it = remove(chessboard.allPieces.begin(), chessboard.allPieces.end(), tmp_piece_ptr); // erase from allPieces
+            chessboard.allPieces.erase(it, chessboard.allPieces.end());
+            it = remove(chessboard.enemy_pieces.begin(), chessboard.enemy_pieces.end(), tmp_piece_ptr); // erase from enemy_pieces
+            chessboard.enemy_pieces.erase(it, chessboard.enemy_pieces.end());
+            
+            chessboard.move(tmp, *posi); //move our piece to the position of the piece
+            cout<<"This is the state of the board after removing the enemy piece and moving our piece"<<endl;
+            chessboard.display_chess_board();
+            if (is_check(chessboard).empty()){
+                cout<<"We add it to correct moves"<<endl;
+                correct_moves.push_back(posi);
+            }
+            chessboard.move(*posi, tmp); //move our piece back to its initial position
+            chessboard.display_chess_board();
+
+            //add the erased piece back to the map and the vectors
+            chessboard.board[*posi] = tmp_piece_ptr;
+            chessboard.allPieces.push_back(tmp_piece_ptr);
+            chessboard.enemy_pieces.push_back(tmp_piece_ptr);
+            chessboard.display_chess_board();
+        } else {
+            cout<<"We are not on the position of an endagering piece"<<endl;
+            chessboard.move(tmp, *posi); //move our piece to the position of the piece
+            cout<<"This is the state of the board after moving our piece"<<endl;
+            chessboard.display_chess_board();
+            if (is_check(chessboard).empty()){
+                correct_moves.push_back(posi);
+            }
+            chessboard.move(*posi, tmp); //move our piece back to its initial position
+            cout<<"Back to init"<<endl;
+            chessboard.display_chess_board();
+        }
+    }
+
+    return correct_moves;
+};
+
+map<shared_ptr<piece_t>, vector<shared_ptr<pair_t>>> all_check_moves(chess_board chessboard){
+    map<shared_ptr<piece_t>, vector<shared_ptr<pair_t>>> res;
+    for (auto& piece : chessboard.my_pieces){
+        auto v = check_moves(piece, chessboard);
+        if(!v.empty()){res[piece] = v;}
+    }
+    return res;
+}
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*------------------------------------------------------------------TESTING------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-
-/*int main(int argc, char* argv[]){
+/*
+int main(int argc, char* argv[]){
+    TESTING THE ENDANGERING PATHS
     //king_t king(std::make_shared<pair_t>('f', 2), "white");
     //vector<shared_ptr<piece_t>> pieces;
     chess_board chessboard;
@@ -183,7 +301,7 @@ vector<shared_ptr<pair_t>> get_path_to_king(piece_t king, piece_t opp_piece){
     chessboard.display_chess_board();
 
     cout<<"Printing all pieces"<<endl;
-    for (auto& piece : chessboard.allPieces){
+    for (auto& piece : chessboard.allPieces){   
         cout<< *piece<<endl;
     }
     chessboard.set_pieces("black");
@@ -219,4 +337,41 @@ vector<shared_ptr<pair_t>> get_path_to_king(piece_t king, piece_t opp_piece){
     }
 
     return 0;
+    
+
+   // Initialize the chessboard
+    chess_board chessboard;
+
+    chessboard.set_pieces("white");  // Assuming this sets up the pieces for both sides
+    //chessboard.color_ai = "white";
+    auto white_king = get_king("white", chessboard);
+    //shared_ptr<piece_t> horse = chessboard.board[pair_t('g', 8)];
+    chessboard.move(pair_t('b', 8), pair_t('d', 3));
+    chessboard.move(pair_t('g', 8), pair_t('f', 3));
+    chessboard.display_chess_board();
+
+    auto v = is_check(chessboard);
+    if (v.empty()){
+        cout<<"Not in a check position";
+    } else {
+        cout<<"In check position"<<endl;
+        cout<<"These pieces are endangering the king : ";
+        for (auto& piece : v){
+            cout<<*piece;
+        }
+    }
+    cout<<endl;
+
+    //shared_ptr<piece_t>  pawn = chessboard.board[pair_t('g', 2)];
+    //auto cmoves = check_moves(pawn, chessboard);
+    auto check_moves_map = all_check_moves(chessboard);
+    cout<< "Possible moves to get out of check position : ";
+    for (auto& piece : check_moves_map){
+        cout<< *(piece.first)<<" can move to ";
+        for(auto& move : piece.second){
+            cout<<*move<<" ";
+        }
+        cout<<"to get out of a check position"<<endl;
+    }
+    cout<<endl;
 } */

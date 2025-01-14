@@ -263,7 +263,7 @@ std::vector<std::shared_ptr<pair_t>> queen_moves(piece_t& cur, std::vector<std::
 
 //global = works for knight and king on its own otherwise it calls the other functions
 std::vector<std::shared_ptr<pair_t>> piece_t::moves(chess_board& board){
-        
+    //cout<<"In M"<<endl;
     auto neighbors = moves_no_constraints(board);
     if (id=="pawn"){
         return pawn_moves(*this, neighbors, board);
@@ -364,6 +364,7 @@ std::vector<std::shared_ptr<pair_t>> pawn_t::moves_no_constraints(chess_board& b
 
 /*--------------------------------------------KNIGHT-------------------------------------------------------*/
 std::vector<std::shared_ptr<pair_t>> horse_t::moves_no_constraints(chess_board& board) const{
+    //cout<<"In MnC"<<endl;
     pair_t actual_pos = *pos;
     std::vector<int> index_pos = find_pos_indexes(actual_pos);
     std::vector<std::shared_ptr<pair_t>> possible_pos;
@@ -394,8 +395,15 @@ std::vector<std::shared_ptr<pair_t>> horse_t::moves_no_constraints(chess_board& 
     if (is_position_in_grid(id_x-1, id_y-2)) {
         possible_pos.push_back(std::make_shared<pair_t>(lett[id_x-1], numb[id_y-2]));
     }
+    
+    //cout<<"Possible pos is empty"<<possible_pos.empty()<<endl;
+    //if (!possible_pos.empty()){
+    //    for (auto& m : possible_pos){
+    //        cout<< *m <<" ";
+    //    }
+    //}
+    //cout<<endl;
     return possible_pos;
-
 }
 
 /*-----------------------------------------------BISHOP---------------------------------------------------*/
@@ -559,7 +567,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<pie
 
     return possible_castling_moves;
 }
-
+*/
 /*--------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------LOCAL TESTING-----------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------*/
