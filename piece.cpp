@@ -41,6 +41,49 @@ std::vector<std::shared_ptr<pair_t>> remove_friendly_pos(piece_t cur, std::vecto
     return ok_pos;
 }
 
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------CORRECT MOVES-------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+std::vector<std::shared_ptr<pair_t>> piece_t::correct_moves(chess_board& chessboard){
+    if (!is_check(chessboard).empty()){
+        return check_moves(chessboard);
+    }
+
+    vector<shared_ptr<pair_t>> possible_moves = moves(chessboard);
+    std::vector<std::shared_ptr<pair_t>> correct_moves;
+    pair_t position = *pos;
+    for (auto& move : possible_moves){
+        if ((chessboard.board).find(*move)!=(chessboard.board).end()){
+            //run the simulation
+            auto tmp_piece_ptr = chessboard.board[*move]; 
+            (chessboard.board).erase(*((*tmp_piece_ptr).pos));
+            auto it = remove(chessboard.allPieces.begin(), chessboard.allPieces.end(), tmp_piece_ptr);
+            chessboard.allPieces.erase(it, chessboard.allPieces.end());
+            it = remove(chessboard.enemy_pieces.begin(), chessboard.enemy_pieces.end(), tmp_piece_ptr); 
+            chessboard.enemy_pieces.erase(it, chessboard.enemy_pieces.end());
+
+            chessboard.move(position, *move);
+            if(is_check(chessboard).empty()){
+                correct_moves.push_back(move);
+            }
+            chessboard.move(*move, position);
+
+            chessboard.board[*move] = tmp_piece_ptr;
+            chessboard.allPieces.push_back(tmp_piece_ptr);
+            chessboard.enemy_pieces.push_back(tmp_piece_ptr);
+        } else {
+            chessboard.move(position, *move);
+            if (is_check(chessboard).empty()){
+                correct_moves.push_back(move);
+            }
+            chessboard.move(*move, position);
+        }
+    }
+    return correct_moves;
+}
+
+
 /*--------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------MOVES------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------*/

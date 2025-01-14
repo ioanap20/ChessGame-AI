@@ -39,7 +39,7 @@ struct piece_t{
         : pos(pos), color(color), id(id), is_moved(false) {};
     
     //correct moves adding the checks if we are in a chec position or if it puts us in a check position
-    //std::vector<std::shared_ptr<pair_t>> correct_moves(chess_board& chessboard); // in piece.cpp
+    std::vector<std::shared_ptr<pair_t>> correct_moves(chess_board& chessboard); // in piece.cpp
     std::vector<std::shared_ptr<pair_t>> check_moves(chess_board& chessboard); // in check.cpp
     //possible moves
     std::vector<std::shared_ptr<pair_t>> moves(chess_board& board);

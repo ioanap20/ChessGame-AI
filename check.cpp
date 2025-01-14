@@ -407,10 +407,11 @@ int main(int argc, char* argv[]){
     //chessboard.color_ai = "white";
     auto white_king = get_king("white", chessboard);
     //shared_ptr<piece_t> horse = chessboard.board[pair_t('g', 8)];
-    chessboard.move(pair_t('b', 8), pair_t('d', 3));
-    chessboard.move(pair_t('g', 8), pair_t('f', 3));
-    chessboard.move(pair_t('e', 1), pair_t('b', 4));
-    chessboard.display_chess_board();
+    //chessboard.move(pair_t('b', 8), pair_t('d', 3));
+    //chessboard.move(pair_t('g', 8), pair_t('f', 3));
+    //chessboard.move(pair_t('e', 1), pair_t('b', 4));
+    chessboard.move(pair_t('f', 8), pair_t('g', 3));
+    //chessboard.display_chess_board();
     chessboard.display_chess_board();
 
     auto v = is_check(chessboard);
@@ -424,9 +425,19 @@ int main(int argc, char* argv[]){
         }
     }
     cout<<endl;
+    cout<<"Getting the pawn"<<endl;
+    shared_ptr<piece_t> pawn = chessboard.board[pair_t('f', 2)];
+    cout<<*pawn<<endl;
+    auto correct_moves = pawn->correct_moves(chessboard);
+    cout<< *pawn << "'s possible moves"<<endl;
+    for (auto& move : correct_moves){
+        cout<< *move<< " ";
+    }
+    cout<<endl;
 
     //shared_ptr<piece_t>  pawn = chessboard.board[pair_t('g', 2)];
     //auto cmoves = check_moves(pawn, chessboard);
+    /*
     auto check_moves_map = all_check_moves(chessboard);
     cout<< "Possible moves to get out of check position : ";
     for (auto& piece : check_moves_map){
@@ -437,4 +448,5 @@ int main(int argc, char* argv[]){
         cout<<"to get out of a check position"<<endl;
     }
     cout<<endl;
+    */
 } 
