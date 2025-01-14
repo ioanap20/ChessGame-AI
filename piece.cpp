@@ -299,6 +299,18 @@ std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints(chess_board& b
     if (is_position_in_grid(index_pos[0], index_pos[1]-1)){
         possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]], numb[index_pos[1]-1]));
     }
+    if (is_position_in_grid(index_pos[0]+1, index_pos[1]+1)) {
+        possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]+1], numb[index_pos[1]+1]));
+    }
+    if (is_position_in_grid(index_pos[0]-1, index_pos[1]+1)) {
+        possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]-1], numb[index_pos[1]+1]));
+    }
+    if (is_position_in_grid(index_pos[0]+1, index_pos[1]-1)) {
+        possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]+1], numb[index_pos[1]-1]));
+    }
+    if (is_position_in_grid(index_pos[0]-1, index_pos[1]-1)) {
+        possible_pos.push_back(std::make_shared<pair_t>(lett[index_pos[0]-1], numb[index_pos[1]-1]));
+    }
     
 
     chess_board temp_board;
