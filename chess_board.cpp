@@ -99,6 +99,7 @@ void chess_board :: remove_piece(const std::shared_ptr<piece_t>& captured_piece)
 
     // Remove from board
     board.erase(*captured_piece->pos);
+
 }
 
 
@@ -136,14 +137,6 @@ void chess_board::move(pair_t from, pair_t to) {
             // Promote to a queen
             do_promotion(*this, initial->second, 'q', initial->second->color);
         }
-    }
-
-    auto destination = board.find(to);
-
-    if (destination != board.end() && destination->second->color != initial->second->color) {
-        // If the destination is occupied by an enemy piece, remove it
-        remove_piece(destination->second);
-        
     }
 
     auto initial_piece = initial->second; // Pointer to the piece_t
@@ -248,4 +241,5 @@ bool chess_board :: is_game_over(){
     }
     return true;
 }
+
 
