@@ -111,7 +111,31 @@ void chess_board::move(pair_t from, pair_t to) {
 
     // Check if the 'from' position exists
     if (initial == board.end() || !initial->second) {
-        throw std::runtime_error("Invalid move: No piece found at the 'from' position.");
+        //cout << from << endl<<to<<endl;
+        //throw std::runtime_error("Invalid move: No piece found at the 'from' position.");
+        return;
+    }
+
+    auto destination = board.find(to);
+
+    if (destination != board.end() && destination->second->color != initial->second->color) {
+        // If the destination is occupied by an enemy piece, remove it
+        remove_piece(destination->second);
+        
+    }
+
+    // ---------- If we can promote a pawn, do it here ----------
+    if (initial->second->id == "pawn" and initial->second->color == color_ai) {
+        if (initial->second->color == "white" && to.y == 8) {
+            // White pawn reached the end of the board
+            // Promote to a queen
+            do_promotion(*this, initial->second, 'q', initial->second->color);
+
+        } else if (initial->second->color == "black" && to.y == 1) {
+            // Black pawn reached the end of the board
+            // Promote to a queen
+            do_promotion(*this, initial->second, 'q', initial->second->color);
+        }
     }
 
     auto destination = board.find(to);
@@ -198,7 +222,7 @@ chess_board chess_board::clone(){
     // Clone white pieces
     for (const auto& piece : whitePieces) {
         if (!piece) continue;
-        std::shared_ptr<piece_t> cloned_piece = std::make_shared<piece_t>(piece->clone());
+        shared_ptr<piece_t> cloned_piece = std::make_shared<piece_t>(piece->clone());
         new_board.whitePieces.push_back(cloned_piece);
         new_board.allPieces.push_back(cloned_piece);
         new_board.board[*cloned_piece->pos] = cloned_piece;

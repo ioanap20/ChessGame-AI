@@ -131,17 +131,20 @@ int evaluate_board(chess_board& board) {
 }
 
 // Function to generate all possible moves for a given color
-std::vector<Move> generate_all_possible_moves(chess_board& board, const std::string& color) {
-    std::vector<Move> all_moves;
-    std::vector<shared_ptr<piece_t>> pieces = (color == "white") ? board.whitePieces : board.blackPieces;
+vector<Move> generate_all_possible_moves(chess_board& board, const string& color) {
+    vector<Move> all_moves;
+    vector<shared_ptr<piece_t>> pieces = (color == "white") ? board.whitePieces : board.blackPieces;
 
     for (const auto& piece : pieces) {
         if (!piece) continue; // Skip if the piece pointer is null
 
         // Generate moves using the existing 'moves' function from piece.cpp
-        std::vector<std::shared_ptr<pair_t>> destination_ptrs = piece->correct_moves(board);
+        vector<shared_ptr<pair_t>> destination_ptrs = piece->correct_moves(board);
+
 
         for (const auto& dest : destination_ptrs) {
+
+            //cout << "Piece: " << piece->id << " at " << piece->pos->x << piece->pos->y << " to " << dest->x << dest->y << endl;
 
             Move move(*piece->pos, *dest, piece, nullptr);
 
@@ -155,6 +158,10 @@ std::vector<Move> generate_all_possible_moves(chess_board& board, const std::str
             all_moves.push_back(move);
         }
     }
+
+    /*for (const auto& move : all_moves) {
+        cout << "Move: " << move.from.x << move.from.y << " to " << move.to.x << move.to.y << endl;
+    }*/
 
     return all_moves;
 }
@@ -170,12 +177,17 @@ int minimax(chess_board& board, int depth, bool is_maximizing_player, int alpha,
         std::vector<Move> possible_moves = generate_all_possible_moves(board, board.color_ai);
 
         for (const auto& move : possible_moves) {
+
+           // cout << "Move: " << move.from.x << move.from.y << " to " << move.to.x << move.to.y << endl;
+
             // Clone the board to simulate the move
             chess_board new_board = board.clone();
 
-
+            //cout << "Move: " << move.from.x << move.from.y << " to " << move.to.x << move.to.y <<" On the new board" << endl;
             // we assume that all moves we can do are valid moves
             new_board.move(move.from, move.to);
+
+            
 
             // Recursively evaluate the move
             int eval = minimax(new_board, depth - 1, false, alpha, beta);
@@ -193,8 +205,13 @@ int minimax(chess_board& board, int depth, bool is_maximizing_player, int alpha,
         std::vector<Move> possible_moves = generate_all_possible_moves(board, opponent_color);
 
         for (const auto& move : possible_moves) {
+
+            //cout << "Move: " << move.from.x << move.from.y << " to " << move.to.x << move.to.y << endl;
+
             // Clone the board to simulate the move
             chess_board new_board = board.clone();
+
+            //cout << "Move: " << move.from.x << move.from.y << " to " << move.to.x << move.to.y <<" On the new board" << endl;
 
             new_board.move(move.from, move.to);
 
@@ -221,6 +238,10 @@ Move find_best_move(chess_board& board, int depth) {
         // Clone the board to simulate the move
         chess_board new_board = board.clone();
 
+        auto piece = new_board.board[move.from];
+
+        //cout << "Move piece: " << *piece << " to " << move.to.x << move.to.y << "New board"<< endl;
+
         // Apply the move
         new_board.move(move.from, move.to);
 
@@ -232,7 +253,11 @@ Move find_best_move(chess_board& board, int depth) {
             best_value = move_value;
             best_move = move;
         }
+
+        //cout <<" Best move: " << best_move.from.x << best_move.from.y << " to " << best_move.to.x << best_move.to.y << endl;
     }
+
+    //cout << "Best move: " << best_move.from.x << best_move.from.y << " to " << best_move.to.x << best_move.to.y << endl;
 
     return best_move;
 }
