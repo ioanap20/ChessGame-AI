@@ -80,6 +80,7 @@ std::vector<std::shared_ptr<pair_t>> piece_t::correct_moves(chess_board& chessbo
             chessboard.move(*move, position);
         }
     }
+
     return correct_moves;
 }
 
@@ -360,7 +361,7 @@ std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints(chess_board& b
     
 
     chess_board temp_board;
-    temp_board = board;
+    temp_board = board.clone();
 
     auto castling_info = can_castle(temp_board, this->color);
 
@@ -370,9 +371,14 @@ std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints(chess_board& b
     if (!castling_info["queenside"].empty()) {
         possible_pos.push_back(castling_info["queenside"][0]);
     }
+
+    for(auto& pos : possible_pos){
+        auto it = temp_board.board.find(*pos);
+        cout << "King moves: " << *pos << endl;
+    }
     
     return possible_pos;
-};
+}
 
 /*------------------------------------------PAWN---------------------------------------------------------*/
 std::vector<std::shared_ptr<pair_t>> pawn_t::moves_no_constraints(chess_board& board) const{
@@ -389,12 +395,12 @@ std::vector<std::shared_ptr<pair_t>> pawn_t::moves_no_constraints(chess_board& b
         init_move = (actual_pos.y==7);
     }   
     
-    shared_ptr<piece_t> piece_to_promote = can_we_promote(board, board.color_ai);
+    /*shared_ptr<piece_t> piece_to_promote = can_we_promote(board, board.color_ai);
 
      if(piece_to_promote){
         cout << "Promote your pawn to a queen, rook, or bishop" << endl;
         do_promotion(board, piece_to_promote, 'q', board.color_ai);
-    }
+    }*/
 
 
     std::vector<int> index_pos = find_pos_indexes(actual_pos);

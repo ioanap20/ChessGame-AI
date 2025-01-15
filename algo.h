@@ -38,6 +38,6 @@ int minimax(chess_board& board, int depth, bool is_maximizing_player, int alpha,
 Move find_best_move(chess_board& board, int depth);
 
 // Function to generate all possible moves for a given color
-std::vector<Move> generate_all_possible_moves(chess_board& board, const std::string& color);
+vector<Move> generate_all_possible_moves(chess_board& board, const string& color);
 
 #endif // ALGO_H

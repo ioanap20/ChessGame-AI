@@ -27,11 +27,10 @@ shared_ptr<piece_t> get_piece (chess_board& board, const pair_t position) {
 
 
 
-shared_ptr<piece_t> can_we_promote (chess_board& board, string& my_color){
+shared_ptr<piece_t> can_we_promote (chess_board& board, string& my_color) {
 
     vector <shared_ptr<piece_t>> promotion_line; 
     int row;
-
     if (my_color == "white") {
         row = 8; 
         }
@@ -42,8 +41,11 @@ shared_ptr<piece_t> can_we_promote (chess_board& board, string& my_color){
 
     for (char letter:letters){
         pair_t position (letter, row);//creates a position for row = 8
-        if (board.board.find(position) != board.board.end() && board.board[position] != nullptr) {
+        if (board.board.find(position) != board.board.end()) {
             shared_ptr<piece_t> piece_to_get = get_piece (board, position);
+
+            cout << "The piece we are trying to promote is: " << *piece_to_get << endl;
+
             if (piece_to_get->id == "pawn") {
                 return piece_to_get;
             }
@@ -85,7 +87,8 @@ void do_promotion (chess_board& board, shared_ptr<piece_t> pawn, const char prom
 
 
     //add new_piece to the list of current colour pieces
-    vector <shared_ptr<piece_t>>& pieces_list = (my_color == "white") ? board.whitePieces : board.blackPieces; //equivalent to an if statement
+    std::vector<std::shared_ptr<piece_t>>& pieces_list =
+        (my_color == "white") ? board.whitePieces : board.blackPieces;
  
     pieces_list.push_back(new_piece);
 
