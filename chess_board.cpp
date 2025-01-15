@@ -2,7 +2,9 @@
 #include <vector>
 #include <fstream>
 #include "chess_board.h"
+#include <algorithm>
 #include "reading.h"
+#include "algo.h"
 using namespace std;
 
 
@@ -68,6 +70,38 @@ void chess_board :: set_pieces(string color){
     }
 }
 
+void chess_board :: remove_piece(const std::shared_ptr<piece_t>& captured_piece){
+
+    cout <<"This piece was captured: "<<*captured_piece<<endl;
+
+    // Helper lambda to compare underlying objects
+    auto cmp = [&](const std::shared_ptr<piece_t>& p) {
+        return p.get() == captured_piece.get();
+    };
+
+    // Remove from whitePieces
+    whitePieces.erase(
+        std::remove_if(whitePieces.begin(), whitePieces.end(), cmp),
+        whitePieces.end()
+    );
+
+    // Remove from blackPieces
+    blackPieces.erase(
+        std::remove_if(blackPieces.begin(), blackPieces.end(), cmp),
+        blackPieces.end()
+    );
+
+    // Remove from allPieces
+    allPieces.erase(
+        std::remove_if(allPieces.begin(), allPieces.end(), cmp),
+        allPieces.end()
+    );
+
+    // Remove from board
+    board.erase(*captured_piece->pos);
+}
+
+
 void chess_board::move(pair_t from, pair_t to) {
     // move piece from one position to another
     // update boardMap
@@ -80,6 +114,14 @@ void chess_board::move(pair_t from, pair_t to) {
         throw std::runtime_error("Invalid move: No piece found at the 'from' position.");
     }
 
+    auto destination = board.find(to);
+
+    if (destination != board.end() && destination->second->color != initial->second->color) {
+        // If the destination is occupied by an enemy piece, remove it
+        remove_piece(destination->second);
+        
+    }
+
     auto initial_piece = initial->second; // Pointer to the piece_t
     initial_piece->pos = make_shared<pair_t>(to); // Update the position of the piece
 
@@ -89,6 +131,8 @@ void chess_board::move(pair_t from, pair_t to) {
     // Move the piece to the new position
     board[to] = initial_piece;
     initial_piece->is_moved = true;
+
+    //cout << "Moved " << initial_piece->id << " from " << from << " to " << to << endl;
     
 }
 
@@ -126,7 +170,7 @@ void chess_board :: display_chess_board() {
     cout << "   a b c d e f g h\n";
 }
 
-void chess_board::output_move(vector<shared_ptr<pair_t>> next_move, char* argv[]) {
+void chess_board::output_move(Move next_move, char* argv[]) {
     string output_file = argv[4];
     ofstream outfile(output_file);
     if (!outfile.is_open()) {
@@ -134,7 +178,50 @@ void chess_board::output_move(vector<shared_ptr<pair_t>> next_move, char* argv[]
         return;
     }
 
-    outfile << *next_move[0] << *next_move[1] << endl;
+    outfile << next_move.from << next_move.to << endl;
     
+}
+
+    vector<shared_ptr<pair_t>> get_all_possible_moves(chess_board board, string color){
+        vector<shared_ptr<pair_t>> all_possible_moves = {};
+        for (auto& piece : board.my_pieces){
+            auto moves = (*piece).correct_moves(board);
+            all_possible_moves.insert(all_possible_moves.end(), moves.begin(), moves.end());
+        }
+        return all_possible_moves;
+    }
+
+chess_board chess_board::clone(){
+    chess_board new_board;
+    new_board.color_ai = color_ai;
+
+    // Clone white pieces
+    for (const auto& piece : whitePieces) {
+        if (!piece) continue;
+        std::shared_ptr<piece_t> cloned_piece = std::make_shared<piece_t>(piece->clone());
+        new_board.whitePieces.push_back(cloned_piece);
+        new_board.allPieces.push_back(cloned_piece);
+        new_board.board[*cloned_piece->pos] = cloned_piece;
+    }
+
+    // Clone black pieces
+    for (const auto& piece : blackPieces) {
+        if (!piece) continue;
+        std::shared_ptr<piece_t> cloned_piece = std::make_shared<piece_t>(piece->clone());
+        new_board.blackPieces.push_back(cloned_piece);
+        new_board.allPieces.push_back(cloned_piece);
+        new_board.board[*cloned_piece->pos] = cloned_piece;
+    }
+
+    return new_board;
+}
+
+bool chess_board :: is_game_over(){
+    for(auto piece : my_pieces){
+        if (!piece->correct_moves(*this).empty()){
+            return false;
+        }
+    }
+    return true;
 }
 

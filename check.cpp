@@ -35,7 +35,7 @@ piece_t get_king(string color, chess_board chessboard){   // This function gets 
     return **it;
 }
 
-vector<shared_ptr<piece_t>> is_check(chess_board chessboard){  // This function checks if our king is in a check position, that is, it computes a vector of all pieces that are threatening the king and returns them, if the vector is empty (check using vector.empty() which gives true if it is and false otherwise), then the king is not in a check position
+vector<shared_ptr<piece_t>> is_check(chess_board& chessboard){  // This function checks if our king is in a check position, that is, it computes a vector of all pieces that are threatening the king and returns them, if the vector is empty (check using vector.empty() which gives true if it is and false otherwise), then the king is not in a check position
     vector<shared_ptr<piece_t>> endangering_pieces = {};
     auto color = chessboard.color_ai;
     auto king = get_king(color, chessboard);
@@ -306,3 +306,4 @@ int main(int argc, char* argv[]){
     cout<<endl;
     
 } */
+

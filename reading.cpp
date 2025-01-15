@@ -62,14 +62,20 @@ void reading::update_board(chess_board& board)
 
     for (size_t i = 0; i < moves.size(); ++i) {
         const string& move = moves[i];
-
+        string color = (i % 2 == 0) ? "white" : "black";
+        
         pair_t from(move[0], move[1] - '0'); // Convert char to int
         pair_t to(move[2], move[3] - '0');
 
-
         board.move(from, to);
-
         
+        // Find the piece at the destination square
+        if(move.size() == 5){
+            
+            auto it = board.board.find(to);
+            do_promotion(board, it->second, move[4], color); 
+            cout <<"We moved " << it->second->id << " to" << to << endl;
+        } 
     }
 
 }

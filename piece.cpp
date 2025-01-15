@@ -321,6 +321,9 @@ std::vector<std::shared_ptr<pair_t>> piece_t::moves(chess_board& board){
         return queen_moves(*this, neighbors, board);
     }
     auto ok_neighbors = remove_friendly_pos(*this, neighbors, board);
+
+    //cout << "ok_neighbors: " << ok_neighbors.size() << endl;
+
     return ok_neighbors;
 };
 
@@ -390,7 +393,7 @@ std::vector<std::shared_ptr<pair_t>> pawn_t::moves_no_constraints(chess_board& b
 
      if(piece_to_promote){
         cout << "Promote your pawn to a queen, rook, or bishop" << endl;
-        do_promotion(board, piece_to_promote, "queen", board.color_ai);
+        do_promotion(board, piece_to_promote, 'q', board.color_ai);
     }
 
 
@@ -589,6 +592,14 @@ std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<pie
         os << *piece << std::endl;
     }
     return os;
+}
+
+piece_t piece_t :: clone(){
+    piece_t new_piece;
+    new_piece.id = id;
+    new_piece.color = color;
+    new_piece.pos = pos;
+    return new_piece;
 }
 
 

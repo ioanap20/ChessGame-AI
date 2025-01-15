@@ -1,9 +1,10 @@
 #include "chess_board.h"
+#include "algo.h"
 #include <iostream>
 #include <limits>
 using namespace std;
 
-vector<shared_ptr<pair_t>> chess_board::next_move(std::string color){
+//vector<shared_ptr<pair_t>> chess_board::next_move(std::string color){
     /*vector<shared_ptr<piece_t>> my_pieces;
     vector<shared_ptr<piece_t>> opponent_pieces;
     if (color=="white"){
@@ -11,7 +12,7 @@ vector<shared_ptr<pair_t>> chess_board::next_move(std::string color){
         opponent_pieces = blackPieces;
     } else { my_pieces = blackPieces; opponent_pieces = whitePieces;}*/
 
-    map<piece_t, vector<shared_ptr<pair_t>>> piece_to_move;
+    /*map<piece_t, vector<shared_ptr<pair_t>>> piece_to_move;
     for (auto& piece : my_pieces){
         //piece_to_move[*piece] = (*piece).moves(allPieces);
         piece_to_move[*piece] = (*piece).moves(*this);
@@ -48,7 +49,7 @@ vector<shared_ptr<pair_t>> chess_board::next_move(std::string color){
     result.push_back(random_piece.pos);
     result.push_back(rand_moves_vec[rand_move_index]);
     return result;
-}
+}*/
     // Build piece_to_move for all pieces
 
     /*string position_from, position_to;
@@ -94,4 +95,146 @@ vector<shared_ptr<pair_t>> chess_board::next_move(std::string color){
     }
 
     return result;
-}*/
+}
+*/
+
+// (------------- MIN-MAX ALGORITHM -----------------)
+// Define piece values for evaluation
+const int PAWN_VALUE = 100;
+const int KNIGHT_VALUE = 320;
+const int BISHOP_VALUE = 330;
+const int ROOK_VALUE = 500;
+const int QUEEN_VALUE = 900;
+const int KING_VALUE = 20000; // Arbitrary high value
+
+// Evaluation function
+int evaluate_board(chess_board& board) {
+    int score = 0;
+    for (const auto& [position, piece] : board.board) {
+        if (piece->color == board.color_ai) {
+            if (piece->id == "pawn") score += PAWN_VALUE;
+            else if (piece->id == "horse") score += KNIGHT_VALUE;
+            else if (piece->id == "bishop") score += BISHOP_VALUE;
+            else if (piece->id == "rook") score += ROOK_VALUE;
+            else if (piece->id == "queen") score += QUEEN_VALUE;
+            else if (piece->id == "king") score += KING_VALUE;
+        } else {
+            if (piece->id == "pawn") score -= PAWN_VALUE;
+            else if (piece->id == "horse") score -= KNIGHT_VALUE;
+            else if (piece->id == "bishop") score -= BISHOP_VALUE;
+            else if (piece->id == "rook") score -= ROOK_VALUE;
+            else if (piece->id == "queen") score -= QUEEN_VALUE;
+            else if (piece->id == "king") score -= KING_VALUE;
+        }
+    }
+    return score;
+}
+
+// Function to generate all possible moves for a given color
+std::vector<Move> generate_all_possible_moves(chess_board& board, const std::string& color) {
+    std::vector<Move> all_moves;
+    std::vector<shared_ptr<piece_t>> pieces = (color == "white") ? board.whitePieces : board.blackPieces;
+
+    for (const auto& piece : pieces) {
+        if (!piece) continue; // Skip if the piece pointer is null
+
+        // Generate moves using the existing 'moves' function from piece.cpp
+        std::vector<std::shared_ptr<pair_t>> destination_ptrs = piece->correct_moves(board);
+
+        for (const auto& dest : destination_ptrs) {
+
+            Move move(*piece->pos, *dest, piece, nullptr);
+
+            // Check if destination has an opponent's piece (capture)
+            auto it = board.board.find(*dest);
+            if (it != board.board.end() && it->second->color != color) {
+                move.captured_piece = it->second;
+            }
+
+
+            all_moves.push_back(move);
+        }
+    }
+
+    return all_moves;
+}
+
+// Minimax function with Alpha-Beta Pruning
+int minimax(chess_board& board, int depth, bool is_maximizing_player, int alpha, int beta) {
+    if (depth == 0 || board.is_game_over()) {
+        return evaluate_board(board);
+    }
+
+    if (is_maximizing_player) {
+        int max_eval = std::numeric_limits<int>::min();
+        std::vector<Move> possible_moves = generate_all_possible_moves(board, board.color_ai);
+
+        for (const auto& move : possible_moves) {
+            // Clone the board to simulate the move
+            chess_board new_board = board.clone();
+
+
+            // we assume that all moves we can do are valid moves
+            new_board.move(move.from, move.to);
+
+            // Recursively evaluate the move
+            int eval = minimax(new_board, depth - 1, false, alpha, beta);
+            max_eval = std::max(max_eval, eval);
+            alpha = std::max(alpha, eval);
+
+            // Alpha-Beta Pruning
+            if (beta <= alpha)
+                break; // Beta cut-off
+        }
+        return max_eval;
+    } else {
+        int min_eval = std::numeric_limits<int>::max();
+        std::string opponent_color = (board.color_ai == "white") ? "black" : "white";
+        std::vector<Move> possible_moves = generate_all_possible_moves(board, opponent_color);
+
+        for (const auto& move : possible_moves) {
+            // Clone the board to simulate the move
+            chess_board new_board = board.clone();
+
+            new_board.move(move.from, move.to);
+
+            // Recursively evaluate the move
+            int eval = minimax(new_board, depth - 1, true, alpha, beta);
+            min_eval = std::min(min_eval, eval);
+            beta = std::min(beta, eval);
+
+            // Alpha-Beta Pruning
+            if (beta <= alpha)
+                break; // Alpha cut-off
+        }
+        return min_eval;
+    }
+}
+
+// Function to find the best move for the AI
+Move find_best_move(chess_board& board, int depth) {
+    int best_value = std::numeric_limits<int>::min();
+    Move best_move(pair_t{'a', 1}, pair_t{'a', 1}, nullptr, nullptr); // Initialize with default positions
+    std::vector<Move> possible_moves = generate_all_possible_moves(board, board.color_ai);
+
+    for (const auto& move : possible_moves) {
+        // Clone the board to simulate the move
+        chess_board new_board = board.clone();
+
+        // Apply the move
+        new_board.move(move.from, move.to);
+
+        // Evaluate the move using Minimax
+        int move_value = minimax(new_board, depth - 1, false, std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+
+        // Select the move with the highest evaluation score
+        if (move_value > best_value) {
+            best_value = move_value;
+            best_move = move;
+        }
+    }
+
+    return best_move;
+}
+
+
