@@ -16,7 +16,7 @@ std::vector<int> numbers = {1,2,3,4,5,6,7,8};
 
 
 
-shared_ptr<piece_t> get_piece (chess_board board, const pair_t position) {
+shared_ptr<piece_t> get_piece (chess_board& board, const pair_t position) {
     auto it = board.board.find(position);
     if (it != board.board.end()) {
         return it -> second;
@@ -27,7 +27,7 @@ shared_ptr<piece_t> get_piece (chess_board board, const pair_t position) {
 
 
 
-shared_ptr<piece_t> can_we_promote (chess_board board, string& my_color){
+shared_ptr<piece_t> can_we_promote (chess_board& board, string& my_color){
 
     vector <shared_ptr<piece_t>> promotion_line; 
     int row;
@@ -55,27 +55,29 @@ shared_ptr<piece_t> can_we_promote (chess_board board, string& my_color){
 }
 
 
-void do_promotion (chess_board board, shared_ptr<piece_t> pawn, const string promote_to, string my_color) {
+void do_promotion (chess_board& board, shared_ptr<piece_t> pawn, const char promote_to, const string& my_color) {
     shared_ptr<piece_t> new_piece;
-    if (promote_to == "queen") {
+    if (promote_to == 'q') {
         new_piece = make_shared<queen_t> (pawn->pos, pawn->color); //created a new queen
     }
-    if (promote_to == "rook") {
+    if (promote_to == 'r') {
         new_piece = make_shared<rook_t> (pawn->pos, pawn->color); //created a new rook
     }
-    if (promote_to == "bishop") {
+    if (promote_to == 'b') {
         new_piece = make_shared<bishop_t> (pawn->pos, pawn->color); //created a new bishop
     }
-    if (promote_to == "horse") {
+    if (promote_to == 'h') {
         new_piece = make_shared<horse_t> (pawn->pos, pawn->color); //created a new knight
     }
 
 
     //add new (promoted) piece to board
 
-    
+    //remove the pawn and replace with the new piece
+    board.remove_piece(pawn);
 
-    board.board.erase(*(pawn->pos));
+
+    //board.board.erase(*(pawn->pos));
     board.board[*(pawn->pos)] = new_piece;
     
 
@@ -83,22 +85,26 @@ void do_promotion (chess_board board, shared_ptr<piece_t> pawn, const string pro
 
 
     //add new_piece to the list of current colour pieces
-    auto pieces_list = (my_color == "white") ? board.whitePieces : board.blackPieces; //equivalent to an if statement
+    vector <shared_ptr<piece_t>>& pieces_list = (my_color == "white") ? board.whitePieces : board.blackPieces; //equivalent to an if statement
  
-    auto it = find(pieces_list.begin(), pieces_list.end (), pawn);
-
-    if (it != pieces_list.end()) {
-        *it = new_piece;
-    }
-
+    pieces_list.push_back(new_piece);
 
 
     //add new_piece to the list of allPieces
-    auto it_all = find(board.allPieces.begin(), board.allPieces.end (), pawn);
+    board.allPieces.push_back(new_piece);
 
-    if (it_all != board.allPieces.end()) {
-        *it_all = new_piece;
+    cout <<"After that promotion the black pieces are: " << endl;
+    for (shared_ptr<piece_t> piece : board.blackPieces) {
+        cout << *piece << endl;
     }
 
+
+    cout << "The player has promoted the pawn to a " << promote_to << endl;
+    cout << "Now we have " << *new_piece << endl;
+    //cout <<"Now there are " <<board.blackPieces.size() << " black pieces" << endl;
+    //cout <<"The black pieces are: " << endl;
+    /*for (shared_ptr<piece_t> piece : board.blackPieces) {
+        cout << *piece << endl;
+    }*/
 
 }

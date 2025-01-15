@@ -7,6 +7,8 @@ using namespace std;
 #ifndef __CHESS_BOARD__H
 #define __CHESS_BOARD__H
 
+struct Move;
+
 struct chess_board{
 
     string color_ai;
@@ -16,13 +18,17 @@ struct chess_board{
     vector<shared_ptr<piece_t>> blackPieces;
     vector<shared_ptr<piece_t>> allPieces;
     map<pair_t, shared_ptr<piece_t>> board;
+
     void move(pair_t from, pair_t to);
     void display_chess_board();
     void set_pieces(string color);
-        
-    vector<shared_ptr<pair_t>> next_move(std::string color);
+    void remove_piece(const shared_ptr<piece_t>& captured_piece);
 
-    void output_move(vector<shared_ptr<pair_t>>next_move, char* argv[]);
+    chess_board clone();
+
+    bool is_game_over();
+
+    void output_move(Move next_move, char* argv[]);
 
     chess_board(); 
 };

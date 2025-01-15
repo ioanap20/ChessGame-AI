@@ -3,6 +3,7 @@
 #include "chess_board.h"
 #include "piece.h"
 #include "reading.h"
+#include "algo.h"
 using namespace std;
 
 int main(int argc, char* argv[]) {
@@ -19,14 +20,24 @@ int main(int argc, char* argv[]) {
     reading read(argc, argv, board);
    
     board.set_pieces(read.color_ai);
-
+   
     cout << "After reading:" << endl;
-        
+
+    cout <<"These are my pieces(white pieces): " <<endl;
+    for (auto& piece : board.my_pieces){
+        cout<<*piece<<endl;
+    }
+
+    cout << "There are enemy pieces: " <<endl;
+    for (auto& piece : board.enemy_pieces){
+        cout<<*piece<<endl;
+    }
+
     board.display_chess_board();
 
-    auto next_move = board.next_move(board.color_ai);
+    auto next_move = find_best_move(board, 1);
     
-    board.move(*next_move[0], *next_move[1]);
+    board.move(next_move.from, next_move.to);
     
     board.output_move(next_move, argv);
     

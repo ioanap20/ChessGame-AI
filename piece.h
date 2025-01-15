@@ -35,8 +35,14 @@ struct piece_t{
     std::string id;
     bool is_moved = false;
 
+    piece_t() = default;
+    
+    
+
     piece_t(std::shared_ptr<pair_t> pos, std::string color, std::string id, bool is_moved)
         : pos(pos), color(color), id(id), is_moved(false) {};
+        
+    piece_t clone();
     
     //correct moves adding the checks if we are in a chec position or if it puts us in a check position
     std::vector<std::shared_ptr<pair_t>> correct_moves(chess_board& chessboard); // in piece.cpp
@@ -111,12 +117,11 @@ std::ostream& operator<<(std::ostream& os, const std::vector<std::shared_ptr<pie
 
 /*-----------------------------------------global variables----------------------------------------------------------*/
 
-
 extern std::map<std::string, std::vector<std::shared_ptr<pair_t>>> can_castle(chess_board chess_board, const std::string& color);
-extern vector<shared_ptr<piece_t>> is_check(chess_board chess_board);
-extern shared_ptr<piece_t> can_we_promote (chess_board board, string& my_color);
-extern void do_promotion (chess_board board, shared_ptr<piece_t> pawn, const string promote_to, string my_color);
-
+extern vector<shared_ptr<piece_t>> is_check(chess_board& chess_board);
+extern shared_ptr<piece_t> can_we_promote (chess_board& board, string& my_color);
+extern void do_promotion (chess_board& board, shared_ptr<piece_t> pawn, const char promote_to, const string& my_color);
+extern piece_t get_king(string color, chess_board chessboard);   // This function gets the piece of the king of a given color
 #endif
 
 
