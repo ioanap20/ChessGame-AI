@@ -194,6 +194,21 @@ void chess_board::output_move(Move next_move, char* argv[]) {
         cerr << "Error: Unable to open output file: output.txt" << endl;
         return;
     }
+    string add = "";
+    auto piece = next_move.moved_piece;
+    if (piece->id == "pawn"){
+        if (color_ai=="white"){
+            if ((next_move.to).y == 8){
+                add = "q";
+            }
+        } else {
+            if (color_ai=="black"){
+                if ((next_move.to).y == 1){
+                    add = "q";
+                }
+            } 
+        } 
+    } 
 
     outfile << next_move.from << next_move.to << endl;
     
