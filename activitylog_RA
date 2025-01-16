@@ -27,6 +27,9 @@ writing down method via comments to refer to next time
 working out how to merge my promotion files to the main branch
 manually uploading my promotion files to main after renaming existing file names to make it clearer
 struggling with starting the code because I didn't understand the syntax and variable names already used by others in other files.
-deciphered other files such as chessboard.h/.cpp ; piece.cpp and castling.cpp to learn from other's code and code structure
+deciphered other files such as chessboard.h/.cpp ; piece.cpp and castling.cpp to learn from other's code, code structure and be up to date with their variable names.
 helped Carla who helped me code the reading promotion in the reading.cpp file during the TD 09/01/25
-studied previous lecture slides and asked chatgpt to help explain certain concepts to be ready to recode promotion.
+studied previous lecture slides and asked chatgpt to help explain certain concepts to recode promotion.
+
+>>week comm. Jan 13
+promotion with syntactic help from Ioana
