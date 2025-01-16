@@ -372,10 +372,6 @@ std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints(chess_board& b
         possible_pos.push_back(castling_info["queenside"][0]);
     }
 
-    for(auto& pos : possible_pos){
-        auto it = temp_board.board.find(*pos);
-        cout << "King moves: " << *pos << endl;
-    }
     
     return possible_pos;
 }

@@ -42,9 +42,9 @@ vector<shared_ptr<piece_t>> is_check(chess_board& chessboard){  // This function
     pair_t king_pos = *(king.pos);
 
     for (auto& piece : chessboard.enemy_pieces){
-        if (piece->id=="king"){
-            continue;
-        }
+        //if (piece->id=="king"){
+        //    continue;
+        //}
         auto moves = (*piece).moves(chessboard);
         auto it = find_if(moves.begin(), moves.end(), [king_pos](const shared_ptr<pair_t>& pos){    
             return (*pos)==king_pos;
