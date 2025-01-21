@@ -226,7 +226,7 @@ void chess_board::output_move(Move next_move, char* argv[]) {
     
 }
 
-    vector<shared_ptr<pair_t>> get_all_possible_moves(chess_board board, string color){
+vector<shared_ptr<pair_t>> get_all_possible_moves(chess_board board, string color){
         vector<shared_ptr<pair_t>> all_possible_moves = {};
         for (auto& piece : board.my_pieces){
             auto moves = (*piece).correct_moves(board);

@@ -153,8 +153,6 @@ vector<Move> generate_all_possible_moves(chess_board& board, const string& color
             if (it != board.board.end() && it->second->color != color) {
                 move.captured_piece = it->second;
             }
-
-
             all_moves.push_back(move);
         }
     }
