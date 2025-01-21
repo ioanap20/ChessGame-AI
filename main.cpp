@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
         for (auto correct_move:piece->correct_moves(board)){
             cout<<*piece<<" to "<<*correct_move<<endl;
         }
-    }
+    }*/
 
 
 
