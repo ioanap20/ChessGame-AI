@@ -13,6 +13,7 @@ add_library(lib_chess_and_the_city
   castling.cpp
   check.cpp
   promotion.cpp
+  en_passant.cpp
 )
 
 add_executable(chess_and_the_city

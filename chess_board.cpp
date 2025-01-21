@@ -72,7 +72,7 @@ void chess_board :: set_pieces(string color){
 
 void chess_board :: remove_piece(const std::shared_ptr<piece_t>& captured_piece){
 
-    cout <<"This piece was captured: "<<*captured_piece<<endl;
+    //cout <<"This piece was captured: "<<*captured_piece<<endl;
 
     // Helper lambda to compare underlying objects
     auto cmp = [&](const std::shared_ptr<piece_t>& p) {
@@ -124,6 +124,18 @@ void chess_board::move(pair_t from, pair_t to) {
         remove_piece(destination->second);
         
     }
+
+    if(initial->second->id == "king" && abs(from.x - to.x) == 2){
+        // Castling
+        if (to.x == 'g') {
+            // Kingside castling
+            move(pair_t('h', from.y), pair_t('f', from.y));
+        } else {
+            // Queenside castling
+            move(pair_t('a', from.y), pair_t('d', from.y));
+        }
+    }
+
 
     // ---------- If we can promote a pawn, do it here ----------
     if (initial->second->id == "pawn" and initial->second->color == color_ai) {
@@ -256,5 +268,4 @@ bool chess_board :: is_game_over(){
     }
     return true;
 }
-
 
