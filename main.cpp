@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
         }
     }*/
 
-    for (auto piece:board.my_pieces){
+    /*for (auto piece:board.my_pieces){
 
         for (auto correct_move:piece->correct_moves(board)){
             cout<<*piece<<" to "<<*correct_move<<endl;
@@ -59,7 +59,11 @@ int main(int argc, char* argv[]) {
 
 
 
-    auto next_move = find_best_move(board, 3);
+
+
+    auto next_move = find_best_move(board, 5);
+
+    
 
     
 

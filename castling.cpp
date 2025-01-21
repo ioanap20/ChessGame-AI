@@ -16,7 +16,7 @@ std::shared_ptr<piece_t> get_piece(chess_board& board, const pair_t& position) {
 
 
 std::map<std::string, vector<shared_ptr<pair_t>>> can_castle(chess_board chess_board, const std::string& color_ai){
-    std::map<std::string, vector<shared_ptr<pair_t>>> castling_moves = {{"kingside", {}}, {"queenside", {}}};
+    std::map<std::string, vector<shared_ptr<pair_t>>> castling_moves = {{"kingside", {}}};
     
     int row = (color_ai == "white") ? 1 : 8;
 
@@ -49,14 +49,14 @@ std::map<std::string, vector<shared_ptr<pair_t>>> can_castle(chess_board chess_b
         return true;
     };
     
-    auto is_path_clear_queenside = [&](string color) {
+    /*auto is_path_clear_queenside = [&](string color) {
         if(chess_board.board.find(pair_t('b', row)) != chess_board.board.end() || 
            chess_board.board.find(pair_t('c', row)) != chess_board.board.end() || 
            chess_board.board.find(pair_t('d', row)) != chess_board.board.end()) {
             return false;
         }
         return true;
-    };
+    };*/
 
 //(-------------- helper function is_check if the king is in check ----------------)
     // agatha has is_check() (to be finished) --> for now, using this impl
@@ -121,9 +121,8 @@ std::map<std::string, vector<shared_ptr<pair_t>>> can_castle(chess_board chess_b
             
 
         }
-
 //(------------ check if it can castle on the queens_side ----------------)
-if (is_path_clear_queenside(color_ai)) {
+/*if (is_path_clear_queenside(color_ai)) {
         pair_t queenside_rook_pos('a', row);
         auto rook = std::dynamic_pointer_cast<rook_t>(get_piece(chess_board, queenside_rook_pos));
         if (rook && !rook->is_moved) {
@@ -154,7 +153,7 @@ if (is_path_clear_queenside(color_ai)) {
                     castling_moves["queenside"] = {make_shared<pair_t>('c', row), make_shared<pair_t>('d', row)};
                 }
     }
-}
+}*/
 
 return castling_moves;
 
