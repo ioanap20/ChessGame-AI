@@ -74,7 +74,7 @@ void reading::update_board(chess_board& board)
             
             auto it = board.board.find(to);
             do_promotion(board, it->second, move[4], color); 
-            cout <<"We moved " << it->second->id << " to" << to << endl;
+            //cout <<"We moved " << it->second->id << " to" << to << endl;
         } 
     }
 

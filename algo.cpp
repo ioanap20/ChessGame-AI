@@ -230,9 +230,20 @@ int minimax(chess_board& board, int depth, bool is_maximizing_player, int alpha,
 
 // Function to find the best move for the AI
 Move find_best_move(chess_board& board, int depth) {
+
+
+
     int best_value = std::numeric_limits<int>::min();
-    Move best_move(pair_t{'a', 1}, pair_t{'a', 1}, nullptr, nullptr); // Initialize with default positions
+    
     std::vector<Move> possible_moves = generate_all_possible_moves(board, board.color_ai);
+    for(auto& m : possible_moves){
+        cout << "Move: " << m.from.x << m.from.y << " to " << m.to.x << m.to.y << endl;
+    }
+    cout<<"Empty possible moves : "<<possible_moves.empty()<<endl;
+    cout<<possible_moves[0].from.x<<possible_moves[0].from.y<<endl;
+    cout<<endl;
+    Move best_move = possible_moves[0]; // Initialize with default positions
+    //cout <<best_move.from.x << best_move.from.y << " to " << best_move.to.x << best_move.to.y << endl;
 
     for (const auto& move : possible_moves) {
         // Clone the board to simulate the move

@@ -44,7 +44,7 @@ shared_ptr<piece_t> can_we_promote (chess_board& board, string& my_color) {
         if (board.board.find(position) != board.board.end()) {
             shared_ptr<piece_t> piece_to_get = get_piece (board, position);
 
-            cout << "The piece we are trying to promote is: " << *piece_to_get << endl;
+            //cout << "The piece we are trying to promote is: " << *piece_to_get << endl;
 
             if (piece_to_get->id == "pawn") {
                 return piece_to_get;
@@ -96,14 +96,14 @@ void do_promotion (chess_board& board, shared_ptr<piece_t> pawn, const char prom
     //add new_piece to the list of allPieces
     board.allPieces.push_back(new_piece);
 
-    cout <<"After that promotion the black pieces are: " << endl;
+    //cout <<"After that promotion the black pieces are: " << endl;
     for (shared_ptr<piece_t> piece : board.blackPieces) {
         cout << *piece << endl;
     }
 
 
-    cout << "The player has promoted the pawn to a " << promote_to << endl;
-    cout << "Now we have " << *new_piece << endl;
+    //cout << "The player has promoted the pawn to a " << promote_to << endl;
+    //cout << "Now we have " << *new_piece << endl;
     //cout <<"Now there are " <<board.blackPieces.size() << " black pieces" << endl;
     //cout <<"The black pieces are: " << endl;
     /*for (shared_ptr<piece_t> piece : board.blackPieces) {
