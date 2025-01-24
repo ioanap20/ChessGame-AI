@@ -1,0 +1,17 @@
+My Contributions
+
+Here’s what I worked on during the project:
+Initial Grid Representation
+Created the starting grid and handled the basic representation of the chessboard.
+En Passant Moves
+Implemented en passant moves for pawns and updated some existing steps to make this feature work properly.
+Piece Capture
+Added and updated the logic for capturing pieces during gameplay.
+Promotion
+Worked on part of the promotion feature and helped Ritthiga with implementing and debugging it.
+Remove Function
+Added a function to remove pieces from the board when captured.
+Notion File for Strategies and Rules
+Created a Notion file to document chess strategies, rules, and key concepts to help the group get familiar with initializing and structuring the project.
+Assisting with Other Functions
+Assisted Ritthiga and Gretl with the implementation and debugging of several other functions throughout the project.
