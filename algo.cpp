@@ -148,7 +148,7 @@ int evaluate_king_safety(chess_board& chessboard){
         }
     }
 
-    return penalty;
+    return -penalty;
 }
 
 
