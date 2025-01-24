@@ -59,12 +59,7 @@ int main(int argc, char* argv[]) {
 
 
 
-
-
     auto next_move = find_best_move(board, 5);
-
-    
-
     
 
     //cout << "Best move: " << next_move.from.x << next_move.from.y << " to " << next_move.to.x << next_move.to.y << endl;
