@@ -1,3 +1,6 @@
+ACTIVITY LOG - RITTHIGAA ANABAYAN
+=================================
+
 >>week comm. Dec 2
 working on implementing an update_board function with Ioana in reading.cpp
 finished my code and pushed to Ioana for her to check and modify
@@ -31,5 +34,13 @@ deciphered other files such as chessboard.h/.cpp ; piece.cpp and castling.cpp to
 helped Carla who helped me code the reading promotion in the reading.cpp file during the TD 09/01/25
 studied previous lecture slides and asked chatgpt to help explain certain concepts to recode promotion.
 
+
 >>week comm. Jan 13
-promotion with syntactic help from Ioana
+coded promotion with syntactic help from Ioana.
+
+
+>>week comm. Jan 20
+analysing game stats and game logs from our last ranking before the official one, to find out where we were crashing
+looked through every single game and analysed whether we'd lost/won/drawn and for what reason
+as a group we found out a bug we had with the castling files since our engine was making illegal moves
+assisted with more detailed analysis of the leaderboard by reading through the game log.
