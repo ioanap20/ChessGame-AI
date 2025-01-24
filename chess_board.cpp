@@ -130,10 +130,7 @@ void chess_board::move(pair_t from, pair_t to) {
         if (to.x == 'g') {
             // Kingside castling
             move(pair_t('h', from.y), pair_t('f', from.y));
-        } else {
-            // Queenside castling
-            move(pair_t('a', from.y), pair_t('d', from.y));
-        }
+        } 
     }
 
 

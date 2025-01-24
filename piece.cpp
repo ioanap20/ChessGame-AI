@@ -368,10 +368,6 @@ std::vector<std::shared_ptr<pair_t>> king_t::moves_no_constraints(chess_board& b
     if (!castling_info["kingside"].empty()) {
         possible_pos.push_back(castling_info["kingside"][0]);
     }
-    if (!castling_info["queenside"].empty()) {
-        possible_pos.push_back(castling_info["queenside"][0]);
-    }
-
     
     return possible_pos;
 }
