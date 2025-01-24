@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
+set (CMAKE_CXX_FLAGS "-std=c++11")
 
 project(chess_and_the_city
   VERSION 1.0

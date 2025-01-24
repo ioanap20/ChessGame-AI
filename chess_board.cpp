@@ -223,7 +223,7 @@ void chess_board::output_move(Move next_move, char* argv[]) {
     
 }
 
-    vector<shared_ptr<pair_t>> get_all_possible_moves(chess_board board, string color){
+vector<shared_ptr<pair_t>> get_all_possible_moves(chess_board board, string color){
         vector<shared_ptr<pair_t>> all_possible_moves = {};
         for (auto& piece : board.my_pieces){
             auto moves = (*piece).correct_moves(board);
@@ -235,6 +235,31 @@ void chess_board::output_move(Move next_move, char* argv[]) {
 chess_board chess_board::clone(){
     chess_board new_board;
     new_board.color_ai = color_ai;
+
+    // Clone white pieces
+    for (const auto& piece : whitePieces) {
+        if (!piece) continue;
+        shared_ptr<piece_t> cloned_piece = std::make_shared<piece_t>(piece->clone());
+        new_board.whitePieces.push_back(cloned_piece);
+        new_board.allPieces.push_back(cloned_piece);
+        new_board.board[*cloned_piece->pos] = cloned_piece;
+    }
+
+    // Clone black pieces
+    for (const auto& piece : blackPieces) {
+        if (!piece) continue;
+        std::shared_ptr<piece_t> cloned_piece = std::make_shared<piece_t>(piece->clone());
+        new_board.blackPieces.push_back(cloned_piece);
+        new_board.allPieces.push_back(cloned_piece);
+        new_board.board[*cloned_piece->pos] = cloned_piece;
+    }
+
+    return new_board;
+}
+
+chess_board chess_board::clone_converse(){
+    chess_board new_board;
+    new_board.color_ai = (color_ai=="white") ? "black" : "white";
 
     // Clone white pieces
     for (const auto& piece : whitePieces) {
