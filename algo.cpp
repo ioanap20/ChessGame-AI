@@ -107,6 +107,52 @@ const int ROOK_VALUE = 500;
 const int QUEEN_VALUE = 900;
 const int KING_VALUE = 20000; // Arbitrary high value
 
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------------- EVALUATION FUNCTIONS ------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+//Bonus for pieces that are in the center of the board since reach more positions and for their mobility so if it is easy to move them later on
+int get_positional_bonus(piece_t& piece, chess_board& board){
+    int CENTER_BONUS = 10;
+    int MOBILITY_BONUS = 5;
+
+    int bonus=0;
+
+    //positional bonus
+    if (piece.pos->x == 'd' || piece.pos->x=='e'){
+        if (piece.pos->y==4 || piece.pos->y==5){
+            bonus +=CENTER_BONUS;
+        }
+    }
+
+    //mobility bonus
+    bonus += piece.correct_moves(board).size() * MOBILITY_BONUS;
+
+    return bonus;
+}
+
+//King safety
+int evaluate_king_safety(chess_board& chessboard){
+    int penalty = 0;
+
+    auto king = chessboard.get_king(chessboard.color_ai);
+
+    //just check the pawn cover
+    auto [king_x, king_y] = *(king.pos);
+    int direction = (chessboard.color_ai=="white") ? 1 : -1;
+    for (int i = -1; i<=1; i++){
+        auto pawn_pos = pair_t(king_x+i, king_y +direction);
+        auto it = chessboard.board.find(pawn_pos);
+        if (it==chessboard.board.end() || it->second->id != "pawn" || it->second->color != chessboard.color_ai){
+            penalty +=50;
+        }
+    }
+
+    return penalty;
+}
+
+
+
 // Evaluation function
 int evaluate_board(chess_board& board) {
     int score = 0;
@@ -184,8 +230,6 @@ int minimax(chess_board& board, int depth, bool is_maximizing_player, int alpha,
             //cout << "Move: " << move.from.x << move.from.y << " to " << move.to.x << move.to.y <<" On the new board" << endl;
             // we assume that all moves we can do are valid moves
             new_board.move(move.from, move.to);
-
-            
 
             // Recursively evaluate the move
             int eval = minimax(new_board, depth - 1, false, alpha, beta);

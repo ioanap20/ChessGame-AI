@@ -24,6 +24,8 @@ struct chess_board{
     void set_pieces(string color);
     void remove_piece(const shared_ptr<piece_t>& captured_piece);
 
+    piece_t get_king(string color);
+
     chess_board clone();
 
     bool is_game_over();
