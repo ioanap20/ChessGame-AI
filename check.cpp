@@ -28,8 +28,8 @@ using namespace std;
 /*---------------------------------------------------BASICS : IS_CHECK MOSTLY----------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-piece_t chess_board::get_king(string color){   // This function gets the piece of the king of a given color
-    auto it = find_if((allPieces).begin(), (allPieces).end(), [color](const shared_ptr<piece_t>& piece){
+piece_t get_king(string color, chess_board chessboard){   // This function gets the piece of the king of a given color
+    auto it = find_if((chessboard.allPieces).begin(), (chessboard.allPieces).end(), [color](const shared_ptr<piece_t>& piece){
                     return (*piece).id == "king" && (*piece).color==color;
                 });
     return **it;
